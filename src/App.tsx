@@ -1,7 +1,12 @@
 import './App.css';
+import Logo from './components/Logo';
 
 function App() {
-  return <>Movio</>;
+  return (
+    <>
+      <Logo />
+    </>
+  );
 }
 
 export default App;

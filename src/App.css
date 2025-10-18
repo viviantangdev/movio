@@ -6,7 +6,7 @@
 }
 
 body {
-  @apply font-body bg-zinc-950 text-zinc-50;
+  @apply scroll-smooth font-body bg-zinc-950 text-zinc-50;
   /* &:hover {
     @apply bg-amber-200;
   } */

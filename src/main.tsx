@@ -3,10 +3,14 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import './App.css';
 import App from './App.tsx';
+import { ModalProvider } from "react-modal-hook";
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <ModalProvider>
+        <App />
+      </ModalProvider>
     </BrowserRouter>
   </StrictMode>
 );

@@ -1,12 +1,22 @@
-import { IoStarSharp } from 'react-icons/io5';
+import { IoPlay, IoStarSharp } from 'react-icons/io5';
+import Modal from '../components/Modal';
 import useMovieDetails from '../hooks/useMovieDetails';
+import useMovieVideos from '../hooks/useMovieVideos';
 
 const Movie = () => {
   const { movieDetails } = useMovieDetails();
+  const { movieTrailer } = useMovieVideos();
+
   return (
     <div>
       <div className='h-90 relative'>
-        <div className='absolute bottom-0 p-7 '>
+        <div
+          className='h-full w-full bg-cover bg-center opacity-15'
+          style={{
+            backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails?.backdrop_path})`,
+          }}
+        />
+        <div className='absolute bottom-0 p-7 space-y-3'>
           <div className='flex items-end gap-3'>
             <img
               src={`https://image.tmdb.org/t/p/w500${movieDetails?.poster_path}`}
@@ -33,16 +43,23 @@ const Movie = () => {
               </div>
             </div>
           </div>
-
-          <p className='pt-7'>{movieDetails?.overview}</p>
+          {movieTrailer && (
+            <Modal
+              button={{ icon: <IoPlay />, text: 'Play trailer' }}
+              children={
+                <iframe
+                  width='500px'
+                  height='250px'
+                  src={`https://www.youtube.com/embed/${movieTrailer}`}
+                  title='Trailer'
+                  allowFullScreen
+                  className='rounded-xl shadow-lg'
+                />
+              }
+            />
+          )}
+          <p className='mt-5'>{movieDetails?.overview}</p>
         </div>
-
-        <div
-          className='h-full w-full bg-cover bg-center opacity-15'
-          style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails?.backdrop_path})`,
-          }}
-        />
       </div>
       tickets
     </div>

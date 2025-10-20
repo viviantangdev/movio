@@ -8,3 +8,5 @@ export const apiUpcoming = `${baseUrl}/movie/upcoming?api_key=${apiKey}`;
 export const apiGenre = `${baseUrl}/genre/movie/list?api_key=${apiKey}`; 
 export const apiMovieDetails = (movieId: number| null ) =>
   `${baseUrl}/movie/${movieId}?api_key=${apiKey}`;
+export const apiMovieVideos = (movieId: number| null ) =>
+  `${baseUrl}/movie/${movieId}/videos?api_key=${apiKey}`;

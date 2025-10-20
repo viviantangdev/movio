@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { apiUpcoming } from '../modules/ApiLinks';
+import { getUpcoming } from '../modules/ApiLinks';
 import type { Movie } from '../types/movie';
 
 const useUpcoming = () => {
@@ -8,7 +8,7 @@ const useUpcoming = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(apiUpcoming).then((response) => {
+      await axios.get(getUpcoming).then((response) => {
         const data = response.data.results;
 
         // Get today’s date
@@ -19,6 +19,8 @@ const useUpcoming = () => {
           const releaseDate = new Date(movie.release_date);
           return releaseDate >= today;
         });
+
+        console.log(data);
 
         // Sort by relese date (newest first)
         const sorted = filtered.sort(

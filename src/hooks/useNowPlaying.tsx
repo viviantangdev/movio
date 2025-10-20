@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { apiNowPlaying } from '../modules/ApiLinks';
+import { getNowPlaying } from '../modules/ApiLinks';
 import type { Movie } from '../types/movie';
 
 const useNowPlaying = () => {
@@ -9,7 +9,7 @@ const useNowPlaying = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(apiNowPlaying).then((response) => {
+      await axios.get(getNowPlaying).then((response) => {
         const data = response.data.results;
 
         // Sort by A to Z

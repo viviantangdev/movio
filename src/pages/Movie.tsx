@@ -1,4 +1,5 @@
 import { IoPlay, IoStarSharp } from 'react-icons/io5';
+import heroUrl from '../assets/hero.jpg';
 import Modal from '../components/Modal';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
@@ -6,7 +7,11 @@ import useMovieVideos from '../hooks/useMovieVideos';
 const Movie = () => {
   const { movieDetails } = useMovieDetails();
   const { movieTrailer } = useMovieVideos();
-
+  const formatRuntime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+  };
   return (
     <div>
       <div className='h-90 relative'>
@@ -19,7 +24,11 @@ const Movie = () => {
         <div className='absolute bottom-0 p-7 space-y-3'>
           <div className='flex items-end gap-3'>
             <img
-              src={`https://image.tmdb.org/t/p/w500${movieDetails?.poster_path}`}
+              src={
+                movieDetails?.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                  : heroUrl
+              }
               alt={movieDetails?.title}
               className='rounded-xl h-40'
             />
@@ -33,7 +42,9 @@ const Movie = () => {
                   </p>
                 </div>
               </div>
-              <span className='text-sm'>{movieDetails?.runtime} min</span>
+              <span className='text-sm'>
+                {formatRuntime(movieDetails!.runtime)}
+              </span>
               <div className='flex flex-wrap gap-2 mt-2'>
                 {movieDetails?.genres.map((genre) => (
                   <span key={genre.id} className='text-sm'>

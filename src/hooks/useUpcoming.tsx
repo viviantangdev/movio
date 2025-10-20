@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { upcoming } from '../modules/ApiLinks';
+import { apiUpcoming } from '../modules/ApiLinks';
 import type { Movie } from '../types/movie';
 
 const useUpcoming = () => {
@@ -8,7 +8,7 @@ const useUpcoming = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(upcoming).then((response) => {
+      await axios.get(apiUpcoming).then((response) => {
         const data = response.data.results;
 
         // Get current year

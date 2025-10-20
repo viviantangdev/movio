@@ -13,5 +13,5 @@ body {
 }
 
 h2{
-    @apply uppercase;
+    @apply uppercase text-xl;
 }

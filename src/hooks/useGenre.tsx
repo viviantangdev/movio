@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { genre } from '../modules/ApiLinks';
+import { apiGenre } from '../modules/ApiLinks';
 import type { Genre } from '../types/movie';
 
 const useGenre = () => {
@@ -8,7 +8,7 @@ const useGenre = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(genre).then((response) => {
+      await axios.get(apiGenre).then((response) => {
         const data = response.data.genres;
 
         setGenres(data);

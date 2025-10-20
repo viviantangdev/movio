@@ -3,13 +3,13 @@ import Logo from './Logo';
 
 const Navbar = () => {
   return (
-    <header className='absolute top-0 w-full p-5 flex justify-between items-center'>
+    <header className='w-full p-5 flex justify-between items-center'>
       <Link to='/'>
           <Logo />
       </Link>
       <ul>
         <li>
-          <Link to='movies'>Movies</Link>
+          <Link to='intheather'>In Theather</Link>
         </li>
       </ul>
     </header>

@@ -4,9 +4,10 @@ import type { Movie } from '../types/movie';
 
 interface MovieCardProps {
   movie: Movie;
+  genreMap: Record<number, string>; 
 }
 
-const MovieCard = ({ movie }: MovieCardProps) => {
+const MovieCard = ({ movie, genreMap }: MovieCardProps) => {
   return (
     <div
       key={movie.id}
@@ -25,7 +26,12 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         <h3 className='text-sm'>{movie.title}</h3>
         <div className='flex items-center gap-0.5'>
           <IoStarSharp className='text-emerald-400' />
-          <p className='text-sm'>{movie.vote_average}</p>
+          <p className='text-sm'>{movie.vote_average.toFixed(1)}</p>
+        </div>
+        <div>
+          {movie.genre_ids.map((g, index) => (
+            <p key={index}>{genreMap[g]}</p>
+          ))}
         </div>
       </div>
     </div>

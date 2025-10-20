@@ -26,10 +26,7 @@ const Movie = () => {
               <span className='text-sm'>{movieDetails?.runtime} min</span>
               <div className='flex flex-wrap gap-2 mt-2'>
                 {movieDetails?.genres.map((genre) => (
-                  <span
-                    key={genre.id}
-                    className='bg-emerald-600/20 text-emerald-300 text-xs px-3 py-1 rounded-full'
-                  >
+                  <span key={genre.id} className='text-sm'>
                     {genre.name}
                   </span>
                 ))}

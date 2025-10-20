@@ -11,17 +11,17 @@ const useUpcoming = () => {
       await axios.get(apiUpcoming).then((response) => {
         const data = response.data.results;
 
-        // Get current year
-        const currentYear = new Date().getFullYear();
+        // Get today’s date
+        const today = new Date();
 
-        // Filter for upcoming movies releasing this year only
-        const thisYearMovies = data.filter((movie: Movie) => {
-          const releaseYear = new Date(movie.release_date).getFullYear();
-          return releaseYear === currentYear;
+        // Filter for movies releasing today or later
+        const filtered = data.filter((movie: Movie) => {
+          const releaseDate = new Date(movie.release_date);
+          return releaseDate >= today;
         });
 
         // Sort by relese date (newest first)
-        const sorted = thisYearMovies.sort(
+        const sorted = filtered.sort(
           (a: Movie, b: Movie) =>
             new Date(a.release_date).getTime() -
             new Date(b.release_date).getTime()

@@ -11,8 +11,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='intheather' element={<InTheather />} />
-        <Route path=':movieId' element={<Movie/>}/>
+        <Route path='/movies' element={<InTheather />} />
+        <Route path='/movies/:movieId' element={<Movie />} />
         {/* Fallback */}
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>

@@ -10,14 +10,14 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie, topContent }: MovieCardProps) => {
   return (
-    <Link to={`${movie.id}`}>
+    <Link to={`/movies/${movie.id}`}>
       <div
         key={movie.id}
-        className='relative w-[180px] min-h-[300px] rounded-xl overflow-hidden bg-zinc-900'
+        className='relative min-w-[100px] w-[200px] min-h-[300px] rounded-xl overflow-hidden bg-zinc-900'
       >
         {movie.poster_path ? (
           <img
-            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={`${movie.title} poster`}
             className='h-[300px] w-full object-cover [mask-image:linear-gradient(to_bottom,black_85%,transparent)]'
           />

@@ -43,7 +43,11 @@ const Home = () => {
           <h2>Upcoming</h2>
           <div className='flex gap-4 overflow-x-scroll pr-4'>
             {upcomingMovies.map((item, index) => (
-              <MovieCard key={index} movie={item} topContent={<p>Release: {item.release_date}</p>}/>
+              <MovieCard
+                key={index}
+                movie={item}
+                topContent={<p>Release: {item.release_date}</p>}
+              />
             ))}
           </div>
         </section>

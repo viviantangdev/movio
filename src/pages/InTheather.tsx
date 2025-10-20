@@ -5,8 +5,8 @@ import useNowPlaying from '../hooks/useNowPlaying';
 const InTheather = () => {
   const { nowPlayingMovies } = useNowPlaying();
   return (
-    <>
-      <div className='grid grid-cols-2 gap-1.5 p-4'>
+    <div className='flex justify-center p-4'>
+      <div className='grid grid-cols-2 gap-4'>
         {nowPlayingMovies.map((movie, index) => (
           <MovieCard
             key={index}
@@ -15,7 +15,7 @@ const InTheather = () => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

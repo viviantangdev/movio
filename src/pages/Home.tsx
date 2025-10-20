@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import MovieCard from '../components/MovieCard';
 import Rating from '../components/Rating';
 import useNowPlaying from '../hooks/useNowPlaying';
@@ -26,7 +27,12 @@ const Home = () => {
         </section>
         {/*In theather */}
         <section className='flex flex-col gap-4'>
-          <h2>In theather</h2>
+          <div className='flex justify-between items-end'>
+            <h2>In theather</h2>
+            <Link to='movies'>
+              <span className='text-emerald-400'>See all</span>
+            </Link>
+          </div>
           <div className='flex gap-4 overflow-x-scroll px-2 pb-6'>
             {nowPlayingMovies.map((item, index) => (
               <MovieCard

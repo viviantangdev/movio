@@ -1,5 +1,4 @@
 import heroUrl from '../assets/hero.jpg';
-import Logo from '../components/Logo';
 import MovieCard from '../components/MovieCard';
 import useGenre from '../hooks/useGenre';
 import useNowPlaying from '../hooks/useNowPlaying';
@@ -11,10 +10,7 @@ const Home = () => {
   const { genreMap } = useGenre();
 
   return (
-    <div className='relative'>
-      <header className='absolute top-0 w-full p-5'>
-        <Logo />
-      </header>
+    <>
       {/*Hero section */}
       <section
         className='h-[25vh] w-full bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center gap-2 p-4'
@@ -38,9 +34,9 @@ const Home = () => {
             ))}
           </div>
         </section>
-        {/*Now in theather */}
+        {/*In theather */}
         <section className='flex flex-col gap-4'>
-          <h2>Now in theather</h2>
+          <h2>In theather</h2>
           <div className='flex gap-4 overflow-x-scroll pr-4'>
             {nowPlayingMovies.map((item, index) => (
               <MovieCard key={index} movie={item} genreMap={genreMap} />
@@ -58,7 +54,7 @@ const Home = () => {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 };
 

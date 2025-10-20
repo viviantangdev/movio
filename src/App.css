@@ -11,3 +11,7 @@ body {
     @apply bg-amber-200;
   } */
 }
+
+h2{
+    @apply uppercase;
+}

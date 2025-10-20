@@ -11,12 +11,9 @@ export interface MovieDetails extends Movie {
   backdrop_path: string;
   runtime: number;
   overview: string;
-  
 }
 
 export interface Genre {
   id: number;
   name: string;
 }
-
-

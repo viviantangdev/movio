@@ -5,7 +5,6 @@ import type { Movie } from '../types/movie';
 interface MovieCardProps {
   movie: Movie;
   topContent: React.ReactElement;
-  //   genreMap: Record<number, string>;
 }
 
 const MovieCard = ({ movie, topContent }: MovieCardProps) => {
@@ -13,7 +12,7 @@ const MovieCard = ({ movie, topContent }: MovieCardProps) => {
     <Link to={`/movies/${movie.id}`}>
       <div
         key={movie.id}
-        className='relative min-w-[100px] w-[200px] min-h-[300px] rounded-xl overflow-hidden bg-zinc-900'
+        className='relative min-w-[100px] w-[200px] h-[360px] rounded-xl overflow-hidden bg-zinc-900 border-1 border-transparent transition-all duration-500 hover:border-emerald-400 hover:shadow-sm hover:shadow-emerald-200'
       >
         {movie.poster_path ? (
           <img
@@ -24,15 +23,7 @@ const MovieCard = ({ movie, topContent }: MovieCardProps) => {
         ) : (
           <img src={heroUrl} alt={`${movie.title} poster`} />
         )}
-        <div className='flex flex-col my-2 p-2 gap-3'>
-          <h3 className='text-sm'>{movie.title}</h3>
-
-          {/* <div>
-              {movie.genre_ids.map((g, index) => (
-                <p key={index}>{genreMap[g]}</p>
-              ))}
-            </div> */}
-        </div>
+        <h3 className='text-md p-4 truncate'>{movie.title}</h3>
         <span className='absolute top-3 left-3 bg-zinc-950/70 text-emerald-300 text-xs px-3 py-1 rounded-full'>
           {topContent}
         </span>

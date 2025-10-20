@@ -10,11 +10,11 @@ const Home = () => {
   return (
     <>
       {/*Main section */}
-      <main className='pl-6 py-4 flex flex-col gap-8'>
+      <main className=' p-7 flex flex-col gap-8'>
         {/*Top ranked */}
         <section className='flex flex-col gap-4'>
           <h2>Top ranked</h2>
-          <div className='flex gap-4 overflow-x-scroll pr-4'>
+          <div className='flex gap-4 overflow-x-scroll px-2 pb-6'>
             {topRankedMovies.map((item, index) => (
               <MovieCard
                 key={index}
@@ -27,7 +27,7 @@ const Home = () => {
         {/*In theather */}
         <section className='flex flex-col gap-4'>
           <h2>In theather</h2>
-          <div className='flex gap-4 overflow-x-scroll pr-4'>
+          <div className='flex gap-4 overflow-x-scroll px-2 pb-6'>
             {nowPlayingMovies.map((item, index) => (
               <MovieCard
                 key={index}
@@ -41,7 +41,7 @@ const Home = () => {
         {/*Upcoming */}
         <section className='flex flex-col gap-4'>
           <h2>Upcoming</h2>
-          <div className='flex gap-4 overflow-x-scroll pr-4'>
+          <div className='flex gap-4 overflow-x-scroll px-2 pb-6'>
             {upcomingMovies.map((item, index) => (
               <MovieCard
                 key={index}

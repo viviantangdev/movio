@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getGenre } from '../modules/ApiLinks';
+import { getGenre } from '../api/ApiLinks';
 import type { Genre } from '../types/movie';
 
 const useGenre = () => {

@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Movies from './pages/Movies';
 import Movie from './pages/Movie';
+import BuyTickets from './pages/BuyTickets';
 
 ReactModal.setAppElement('#root');
 
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/movies' element={<Movies />} />
         <Route path='/movies/:movieId' element={<Movie />} />
+        <Route path='/tickets/:movieId' element={<BuyTickets />} />
         {/* Fallback */}
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>

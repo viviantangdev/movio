@@ -3,8 +3,11 @@
 
 @theme {
   --font-body: 'Poppins', sans-serif;
+  --transition-smooth: all 0.5s ease-in-out;
 }
-
+@utility transition-smooth {
+  transition: var(--transition-smooth);
+}
 body {
   @apply scroll-smooth font-body bg-zinc-950 text-zinc-50;
 }
@@ -14,19 +17,48 @@ h2 {
 }
 
 button {
-  @apply cursor-pointer bg-emerald-600 rounded-xl px-3 py-1 transition-all duration-500;
+  @apply cursor-pointer rounded-xl border
+  px-4 py-3 
+  transition-smooth;
 
+  &:focus {
+    @apply outline-none ring-2 ring-emerald-500;
+  }
+}
+.primaryButton {
+  @apply bg-emerald-500 text-zinc-900 border-emerald-400 shadow-lg;
   &:hover {
     @apply bg-emerald-400;
   }
 }
+.secondaryButton {
+  @apply bg-zinc-900 border-zinc-800 text-zinc-300;
+
+  &:hover {
+    @apply bg-emerald-400 border-emerald-400 text-zinc-900;
+  }
+}
 
 input {
-  @apply bg-zinc-900 py-2 text-zinc-50 placeholder-zinc-500 rounded-xl inset-shadow-sm shadow-2xs border-none ring-2 ring-emerald-600 transition-all duration-500;
+  @apply bg-zinc-900 py-2 text-zinc-50
+   placeholder-zinc-500 rounded-xl 
+   inset-shadow-sm shadow-2xs
+    border-none ring-2 ring-emerald-600 
+    transition-smooth;
   &:hover {
     @apply outline-none ring-emerald-400;
   }
   &:focus {
     @apply outline-none ring-emerald-400;
+  }
+}
+
+.movieCard {
+  @apply rounded-xl overflow-hidden bg-zinc-900 border-1 border-transparent transition-smooth;
+  &:hover {
+    @apply border-emerald-400 shadow-sm shadow-emerald-200;
+  }
+  &:focus {
+    @apply outline-none ring-2 ring-emerald-400;
   }
 }

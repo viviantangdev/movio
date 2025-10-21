@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieVideos } from '../modules/ApiLinks';
+import { getMovieVideos } from '../api/ApiLinks';
 
 interface Video {
   id: string;

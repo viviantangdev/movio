@@ -29,7 +29,7 @@ const Movies = () => {
           className='w-full pr-3 pl-10'
         />
         <IoClose
-          className='absolute right-3 opacity-0 group-focus-within:opacity-100 transition-all duration-500 cursor-pointer'
+          className='absolute right-3 opacity-0 group-focus-within:opacity-100 transition-smooth cursor-pointer'
           onClick={() => setSearchTerm('')}
         >
           clear
@@ -39,7 +39,6 @@ const Movies = () => {
       {/*Movies */}
 
       {filterMovies.length === 0 ? (
-  
         <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
           <p className='text-lg font-medium text-zinc-300'>No matches found.</p>
           <p className='text-sm text-zinc-500'>

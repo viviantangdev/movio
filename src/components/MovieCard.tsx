@@ -12,7 +12,7 @@ const MovieCard = ({ movie, topContent }: MovieCardProps) => {
     <Link to={`/movies/${movie.id}`}>
       <div
         key={movie.id}
-        className='relative min-w-[100px] w-[200px] h-[360px] rounded-xl overflow-hidden bg-zinc-900 border-1 border-transparent transition-all duration-500 hover:border-emerald-400 hover:shadow-sm hover:shadow-emerald-200'
+        className='relative min-w-[100px] w-[200px] h-[360px] movieCard'
       >
         {movie.poster_path ? (
           <img

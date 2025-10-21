@@ -1,20 +1,22 @@
-import { IoPlay, IoStarSharp } from 'react-icons/io5';
+import { IoPlay, IoStarSharp, IoTicket } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 import heroUrl from '../assets/hero.jpg';
 import Modal from '../components/Modal';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
+import { formatRuntime } from '../utils/format';
 
 const Movie = () => {
   const { movieDetails } = useMovieDetails();
   const { movieTrailer } = useMovieVideos();
-  const formatRuntime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins}m`;
+  const navigate = useNavigate();
+
+  const handleBuyTickets = () => {
+    navigate(`/tickets/${movieDetails?.id}`);
   };
   return (
     <div>
-      <div className='h-90 relative'>
+      <div className='relative h-130'>
         <div
           className='h-full w-full bg-cover bg-center opacity-15'
           style={{
@@ -54,25 +56,33 @@ const Movie = () => {
               </div>
             </div>
           </div>
-          {movieTrailer && (
-            <Modal
-              button={{ icon: <IoPlay />, text: 'Play trailer' }}
-              children={
-                <iframe
-                  width='500px'
-                  height='250px'
-                  src={`https://www.youtube.com/embed/${movieTrailer}`}
-                  title='Trailer'
-                  allowFullScreen
-                  className='rounded-xl shadow-lg'
-                />
-              }
-            />
-          )}
+          <div className='flex gap-2'>
+            {movieTrailer && (
+              <Modal
+                button={{ icon: <IoPlay />, text: 'Play trailer' }}
+                children={
+                  <iframe
+                    width='500px'
+                    height='250px'
+                    src={`https://www.youtube.com/embed/${movieTrailer}`}
+                    title='Trailer'
+                    allowFullScreen
+                    className='rounded-xl shadow-lg'
+                  />
+                }
+              />
+            )}
+            <button
+              onClick={handleBuyTickets}
+              className='primaryButton flex items-center gap-2 '
+            >
+              <IoTicket />
+              Buy tickets
+            </button>
+          </div>
           <p className='mt-5'>{movieDetails?.overview}</p>
         </div>
       </div>
-      tickets
     </div>
   );
 };

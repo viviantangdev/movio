@@ -36,7 +36,7 @@ const Modal = ({ children, button }: ModalProps) => {
       <div className='flex justify-end'>
         <IoCloseCircleOutline
           onClick={hideModal}
-          className='text-emerald-400 text-2xl'
+          className='cursor-pointer text-emerald-400 text-2xl'
         />
       </div>
 
@@ -48,7 +48,7 @@ const Modal = ({ children, button }: ModalProps) => {
   return (
     <button
       onClick={showModal}
-      className='flex items-center gap-2 '
+      className='secondaryButton flex items-center gap-2 '
     >
       {button.icon}
       {button.text}

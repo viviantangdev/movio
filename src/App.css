@@ -7,9 +7,6 @@
 
 body {
   @apply scroll-smooth font-body bg-zinc-950 text-zinc-50;
-  /* &:hover {
-    @apply bg-amber-200;
-  } */
 }
 
 h2 {
@@ -17,9 +14,19 @@ h2 {
 }
 
 button {
-  @apply cursor-pointer bg-emerald-600 rounded-xl px-3 py-1 transition-all duration-500 hover:bg-emerald-400 ;
+  @apply cursor-pointer bg-emerald-600 rounded-xl px-3 py-1 transition-all duration-500;
+
+  &:hover {
+    @apply bg-emerald-400;
+  }
 }
 
 input {
-  @apply bg-zinc-900 py-2 text-zinc-50 focus:outline-none placeholder-zinc-500 rounded-xl inset-shadow-sm shadow-2xs border-none ring-2 ring-emerald-600 focus:ring-2 focus:ring-emerald-400 transition-all duration-500;
+  @apply bg-zinc-900 py-2 text-zinc-50 placeholder-zinc-500 rounded-xl inset-shadow-sm shadow-2xs border-none ring-2 ring-emerald-600 transition-all duration-500;
+  &:hover {
+    @apply outline-none ring-emerald-400;
+  }
+  &:focus {
+    @apply outline-none ring-emerald-400;
+  }
 }

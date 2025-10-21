@@ -15,7 +15,6 @@ const Movies = () => {
   return (
     <div className='flex flex-col items-center justify-center p-4 gap-7'>
       {/*Search bar */}
-
       <div className='relative flex items-center group'>
         <IoSearchOutline className='absolute ml-3 pointer-events-none' />
         <input
@@ -38,15 +37,26 @@ const Movies = () => {
       </div>
 
       {/*Movies */}
-      <div className='grid grid-cols-2 gap-4'>
-        {filterMovies.map((movie, index) => (
-          <MovieCard
-            key={index}
-            movie={movie}
-            topContent={<Rating vote={movie.vote_average} />}
-          />
-        ))}
-      </div>
+
+      {filterMovies.length === 0 ? (
+  
+        <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
+          <p className='text-lg font-medium text-zinc-300'>No matches found.</p>
+          <p className='text-sm text-zinc-500'>
+            Try searching for another movie title!
+          </p>
+        </div>
+      ) : (
+        <div className='grid grid-cols-2 gap-4'>
+          {filterMovies.map((movie, index) => (
+            <MovieCard
+              key={index}
+              movie={movie}
+              topContent={<Rating vote={movie.vote_average} />}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

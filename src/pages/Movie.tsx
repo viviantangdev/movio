@@ -1,19 +1,25 @@
 import { IoPlay, IoStarSharp, IoTicket } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import heroUrl from '../assets/hero.jpg';
+import ErrorState from '../components/ErrorState';
+import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
 import { formatRuntime } from '../utils/format';
 
 const Movie = () => {
-  const { movieDetails } = useMovieDetails();
+  const { movieDetails, loading, error } = useMovieDetails();
   const { movieTrailer } = useMovieVideos();
   const navigate = useNavigate();
 
   const handleBuyTickets = () => {
     navigate(`/tickets/${movieDetails?.id}`);
   };
+
+  if (loading) return <Loader />;
+  if (error) return <ErrorState error={error}/>;
+
   return (
     <div>
       <div className='relative h-130'>

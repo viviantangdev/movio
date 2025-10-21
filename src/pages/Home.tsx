@@ -1,12 +1,19 @@
 import { Link } from 'react-router-dom';
+import ErrorState from '../components/ErrorState';
+import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
 import Rating from '../components/Rating';
 import useNowPlaying from '../hooks/useNowPlaying';
 import useUpcoming from '../hooks/useUpcoming';
 
 const Home = () => {
-  const { nowPlayingMovies, topRankedMovies } = useNowPlaying();
-  const { upcomingMovies } = useUpcoming();
+  const { nowPlayingMovies, topRankedMovies, loading, error } = useNowPlaying();
+  const { upcomingMovies, upcomingLoading, upcomingError } = useUpcoming();
+
+  if (loading) return <Loader />;
+  if (error) return <ErrorState error={error} />;
+  if (upcomingLoading) return <Loader />;
+  if (upcomingError) return <ErrorState error={error} />;
 
   return (
     <>

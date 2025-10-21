@@ -1,6 +1,6 @@
 import DateSelector from '../components/DateSelector';
+import SeatSelector from '../components/SeatSelector';
 import TimeSelector from '../components/TimeSelector';
-import SeatSelector from '../components/seatSelector';
 
 const BuyTickets = () => {
   return (

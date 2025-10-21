@@ -6,8 +6,8 @@ import type { MovieDetails } from '../types/movie';
 
 const useMovieDetails = () => {
   const { movieId } = useParams<string>();
-  const [movieDetails, setMovieDetails] = useState<MovieDetails>();
-
+  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
+  
   useEffect(() => {
     const fetchData = async () => {
       await axios.get(getMovieDetails(Number(movieId))).then((response) => {

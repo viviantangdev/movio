@@ -20,8 +20,6 @@ const useUpcoming = () => {
           return releaseDate >= today;
         });
 
-        console.log(data);
-
         // Sort by relese date (newest first)
         const sorted = filtered.sort(
           (a: Movie, b: Movie) =>

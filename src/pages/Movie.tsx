@@ -7,7 +7,7 @@ import useMovieVideos from '../hooks/useMovieVideos';
 const Movie = () => {
   const { movieDetails } = useMovieDetails();
   const { movieTrailer } = useMovieVideos();
-  const formatRuntime = (minutes: number): string => {
+  const formatRuntime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
@@ -26,7 +26,7 @@ const Movie = () => {
             <img
               src={
                 movieDetails?.poster_path
-                  ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                  ? `https://image.tmdb.org/t/p/w500${movieDetails?.poster_path}`
                   : heroUrl
               }
               alt={movieDetails?.title}
@@ -43,7 +43,7 @@ const Movie = () => {
                 </div>
               </div>
               <span className='text-sm'>
-                {formatRuntime(movieDetails!.runtime)}
+                {movieDetails?.runtime && formatRuntime(movieDetails?.runtime)}
               </span>
               <div className='flex flex-wrap gap-2 mt-2'>
                 {movieDetails?.genres.map((genre) => (

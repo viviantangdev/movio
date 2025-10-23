@@ -3,6 +3,7 @@ import SeatSelector from '../components/SeatSelector';
 import TimeSelector from '../components/TimeSelector';
 
 const BuyTickets = () => {
+    
   return (
     <div className='p-7'>
       <h2>Buy tickets</h2>

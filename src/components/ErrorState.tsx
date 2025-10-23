@@ -17,7 +17,7 @@ const ErrorState = ({ error }: ErrorStateProps) => {
     ? 'not-found'
     : 'unknown';
 
-  // 🎨 Define variant visuals
+  // Define variant visuals
   const variants = {
     network: {
       icon: <MdWifiOff className='w-16 h-16 text-gray-500 mb-4' />,

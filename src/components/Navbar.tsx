@@ -7,8 +7,8 @@ interface NavbarLink {
 }
 
 const Links: NavbarLink[] = [
-  { linkTo: '/', navName: 'Home' },
-  { linkTo: 'movies', navName: 'Movies' },
+  { linkTo: '/', navName: 'Movies' },
+  // { linkTo: 'movies', navName: 'Movies' },
 ];
 
 const Navbar = () => {

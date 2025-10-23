@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import MovieCard from '../components/MovieCard';
-import Rating from '../components/Rating';
 import useNowPlaying from '../hooks/useNowPlaying';
 
 const Movies = () => {
@@ -20,9 +19,9 @@ const Movies = () => {
         <input
           type='text'
           name='search'
-          placeholder='Search note'
+          placeholder='Search movie'
           autoComplete='off'
-          aria-label='Search note'
+          aria-label='Search movie'
           onChange={(e) => {
             setSearchTerm(e.target.value);
           }}
@@ -51,7 +50,8 @@ const Movies = () => {
             <MovieCard
               key={index}
               movie={movie}
-              topContent={<Rating vote={movie.vote_average} />}
+              movieType='default'
+              index={index}
             />
           ))}
         </div>

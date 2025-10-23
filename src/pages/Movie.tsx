@@ -14,7 +14,7 @@ const Movie = () => {
   const navigate = useNavigate();
 
   const handleBuyTickets = () => {
-    navigate(`/tickets/${movieDetails?.id}`);
+    navigate(`/movies/${movieDetails?.id}/ticket`);
   };
 
   if (loading) return <Loader />;

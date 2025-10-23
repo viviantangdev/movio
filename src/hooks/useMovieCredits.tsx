@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCasts } from '../api/ApiLinks';
-import type { MovieActors } from '../types/movie';
+import { getCredits } from '../api/ApiLinks';
+import type { CastMember, CrewMember } from '../types/movie';
 
-const useMovieActors = () => {
+const useMovieCredits = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [actors, setActors] = useState<MovieActors[]>([]);
-  const [actorsLoading, setLoading] = useState<boolean>(true);
-  const [actorsError, setError] = useState<string | null>(null);
-
+  const [creditsLoading, setLoading] = useState<boolean>(true);
+  const [creditsError, setError] = useState<string | null>(null);
+  const [casts, setCasts] = useState<CastMember[]>([]);
+  const [crews, setCrews] = useState<CrewMember[]>([]);
   useEffect(() => {
     if (!movieId) return;
 
@@ -21,8 +21,15 @@ const useMovieActors = () => {
         // throw new Error('Network Error: Failed to connect');
         // throw new Error('404 Not Found');
         // throw new Error('Something unexpected happened');
-        const response = await axios.get(getCasts(Number(movieId)));
-        setActors(response.data.cast || []);
+        const response = await axios.get(getCredits(Number(movieId)));
+
+        const cast: CastMember[] = response.data.cast;
+        setCasts(cast || []);
+
+        const crew: CrewMember[] = response.data.crew;
+        const crewDirectors = crew.filter((member) => member.job === 'Director');
+        setCrews(crewDirectors);
+
       } catch (error) {
         if (axios.isCancel(error)) return; // Request was canceled
         if (axios.isAxiosError(error)) {
@@ -39,7 +46,7 @@ const useMovieActors = () => {
     fetchData();
   }, [movieId]);
 
-  return { actors, actorsLoading, actorsError };
+  return { casts, crews, creditsLoading, creditsError };
 };
 
-export default useMovieActors;
+export default useMovieCredits;

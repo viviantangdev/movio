@@ -5,22 +5,22 @@ import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import useLanguages from '../hooks/useLanguages';
-import useActors from '../hooks/useMovieActors';
+import useCredits from '../hooks/useMovieCredits';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
-import type { Languages, MovieDetails } from '../types/movie';
+import type { Language, MovieDetails } from '../types/movie';
 import { formatRuntime } from '../utils/format';
 import BuyTickets from './BuyTickets';
 
 const Movie = () => {
   const { movieDetails, loading, error } = useMovieDetails();
-  const { actors, actorsLoading, actorsError } = useActors();
+  const { casts, crews, creditsLoading, creditsError } = useCredits();
   const { languages, languagesLoading, languagesError } = useLanguages();
   const { movieTrailer } = useMovieVideos();
   const navigate = useNavigate();
 
-  if (loading || languagesLoading || actorsLoading) return <Loader />;
-  if (!movieDetails || error || languagesError || actorsError)
+  if (loading || languagesLoading || creditsLoading) return <Loader />;
+  if (!movieDetails || error || languagesError || creditsError)
     return <ErrorState error={error} />;
 
   const handleBuyTickets = () => {
@@ -29,16 +29,15 @@ const Movie = () => {
 
   const getOriginalLanguage = (
     movieDetails: MovieDetails,
-    languages: Languages[]
+    languages: Language[],
   ): string => {
     const iso = movieDetails.original_language;
-    if (!iso) return 'Unknown';
-
-    const found = languages.find((l) => l.iso === iso);
+    const found = languages.find((l) => l.iso_639_1 === iso);
     return found?.english_name ?? 'Unknown';
   };
 
   const originalLanguage = getOriginalLanguage(movieDetails, languages);
+
 
   return (
     <div>
@@ -130,8 +129,14 @@ const Movie = () => {
             <p>{movieDetails.release_date}</p>
           </div>
           <div className='flex flex-col gap-1'>
+            <span className='font-extralight text-gray-400'>Directors:</span>
+            {crews.map((director, index) => (
+              <p key={index}>{director.name}</p>
+            ))}
+          </div>
+          <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Actors:</span>
-            {actors.map((actor, index) => (
+            {casts.map((actor, index) => (
               <p key={index}>{actor.name}</p>
             ))}
           </div>

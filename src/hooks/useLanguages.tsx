@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getLanguages } from '../api/ApiLinks';
-import type { Languages } from '../types/movie';
+import type { Language } from '../types/movie';
 
 const useLanguages = () => {
-  const [languages, setLanguages] = useState<Languages[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
   const [languagesLoading, setLoading] = useState<boolean>(true);
   const [languagesError, setError] = useState<string | null>(null);
 

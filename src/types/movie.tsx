@@ -15,9 +15,14 @@ export interface MovieDetails extends Movie {
   original_language:string;
 }
 
-export interface MovieActors extends Movie {
+
+export interface CastMember{
   name: string;
   character: string;
+}
+export interface CrewMember {
+  job: string;
+  name: string;
 }
 
 export interface Genre {
@@ -25,7 +30,7 @@ export interface Genre {
   name: string;
 }
 
-export interface Languages {
-  iso: string;
+export interface Language {
+  iso_639_1: string;
   english_name: string;
 }

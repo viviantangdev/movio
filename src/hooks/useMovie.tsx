@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {  useParams } from 'react-router-dom';
-import { getMovieDetails } from '../api/ApiLinks';
-import type { MovieDetails } from '../types/movie';
+import { useParams } from 'react-router-dom';
+import { getMovie } from '../api/ApiLinks';
+import type { Movie } from '../types/movie';
 
-const useMovieDetails = () => {
+const useMovie = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [loadingMovie, setLoading] = useState<boolean>(true);
+  const [errorMovie, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!movieId) return;
@@ -21,8 +21,8 @@ const useMovieDetails = () => {
         // throw new Error('Network Error: Failed to connect');
         // throw new Error('404 Not Found');
         // throw new Error('Something unexpected happened');
-        const response = await axios.get(getMovieDetails(Number(movieId)));
-        setMovieDetails(response.data);
+        const response = await axios.get(getMovie(Number(movieId)));
+        setMovie(response.data);
       } catch (error) {
         if (axios.isCancel(error)) return; // Request was canceled
         if (axios.isAxiosError(error)) {
@@ -39,7 +39,7 @@ const useMovieDetails = () => {
     fetchData();
   }, [movieId]);
 
-  return { movieDetails, loading, error };
+  return { movie, loadingMovie, errorMovie };
 };
 
-export default useMovieDetails;
+export default useMovie;

@@ -6,8 +6,8 @@ import type { Movie } from '../types/movie';
 const useNowPlaying = () => {
   const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]);
   const [topRankedMovies, setTopRankedMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingMovies, setLoading] = useState<boolean>(true);
+  const [errorMovies, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,7 +50,7 @@ const useNowPlaying = () => {
     fetchData();
   }, []);
 
-  return { nowPlayingMovies, topRankedMovies, loading, error };
+  return { nowPlayingMovies, topRankedMovies, loadingMovies, errorMovies };
 };
 
 export default useNowPlaying;

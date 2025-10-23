@@ -5,39 +5,38 @@ import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import useLanguages from '../hooks/useLanguages';
-import useCredits from '../hooks/useMovieCredits';
-import useMovieDetails from '../hooks/useMovieDetails';
-import useMovieVideos from '../hooks/useMovieVideos';
-import type { Language, MovieDetails } from '../types/movie';
+import useCredits from '../hooks/useCredits';
+import useMovie from '../hooks/useMovie';
+import type { Language, Movie } from '../types/movie';
 import { formatRuntime } from '../utils/format';
 import BuyTickets from './BuyTickets';
+import useVideo from '../hooks/useVideo';
 
 const Movie = () => {
-  const { movieDetails, loading, error } = useMovieDetails();
-  const { casts, crews, creditsLoading, creditsError } = useCredits();
-  const { languages, languagesLoading, languagesError } = useLanguages();
-  const { movieTrailer } = useMovieVideos();
+  const { movie, loadingMovie, errorMovie } = useMovie();
+  const { casts, crews, loadingCredits, errorCredits } = useCredits();
+  const { languages, loadingLanguages, errorLanguages } = useLanguages();
+  const { movieTrailer } = useVideo();
   const navigate = useNavigate();
 
-  if (loading || languagesLoading || creditsLoading) return <Loader />;
-  if (!movieDetails || error || languagesError || creditsError)
-    return <ErrorState error={error} />;
+  if (loadingMovie || loadingCredits || loadingLanguages) return <Loader />;
+  if (!movie || errorMovie || errorCredits || errorLanguages)
+    return <ErrorState error={errorMovie || errorCredits || errorLanguages} />;
 
   const handleBuyTickets = () => {
-    navigate(`/movies/${movieDetails.id}/ticket`);
+    navigate(`/movies/${movie.id}/ticket`);
   };
 
   const getOriginalLanguage = (
-    movieDetails: MovieDetails,
-    languages: Language[],
+    movie: Movie,
+    languages: Language[]
   ): string => {
-    const iso = movieDetails.original_language;
+    const iso = movie.original_language;
     const found = languages.find((l) => l.iso_639_1 === iso);
     return found?.english_name ?? 'Unknown';
   };
 
-  const originalLanguage = getOriginalLanguage(movieDetails, languages);
-
+  const originalLanguage = getOriginalLanguage(movie, languages);
 
   return (
     <div>
@@ -45,35 +44,35 @@ const Movie = () => {
         <div
           className='h-full w-full bg-cover bg-center opacity-15'
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
+            backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
           }}
         />
         <div className='absolute bottom-0 p-7 space-y-3'>
           <div className='flex items-end gap-3'>
             <img
               src={
-                movieDetails.poster_path
-                  ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                   : heroUrl
               }
-              alt={movieDetails.title}
+              alt={movie.title}
               className='rounded-xl h-40'
             />
             <div>
               <div className='flex flex-wrap items-center gap-2'>
-                <h2>{movieDetails.title}</h2>
+                <h2>{movie.title}</h2>
                 <div className='flex items-center gap-0.5'>
                   <IoStarSharp className='text-emerald-400' />
                   <p className='text-sm'>
-                    {movieDetails.vote_average.toFixed(1)}
+                    {movie.vote_average.toFixed(1)}
                   </p>
                 </div>
               </div>
               <span className='text-sm'>
-                {movieDetails.runtime && formatRuntime(movieDetails.runtime)}
+                {movie.runtime && formatRuntime(movie.runtime)}
               </span>
               <div className='flex flex-wrap gap-2 mt-2'>
-                {movieDetails.genres.map((genre) => (
+                {movie.genres.map((genre) => (
                   <span key={genre.id} className='text-sm'>
                     {genre.name}
                   </span>
@@ -109,13 +108,13 @@ const Movie = () => {
       </div>
 
       <div className='flex flex-col gap-7 p-7'>
-        <p className='mt-5'>{movieDetails.overview}</p>
+        <p className='mt-5'>{movie.overview}</p>
         <div className='flex flex-col gap-2'>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>
               Original title:
             </span>
-            <p>{movieDetails.original_title}</p>
+            <p>{movie.original_title}</p>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>
@@ -126,7 +125,7 @@ const Movie = () => {
 
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Release date:</span>
-            <p>{movieDetails.release_date}</p>
+            <p>{movie.release_date}</p>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Directors:</span>

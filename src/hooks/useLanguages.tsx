@@ -5,8 +5,8 @@ import type { Language } from '../types/movie';
 
 const useLanguages = () => {
   const [languages, setLanguages] = useState<Language[]>([]);
-  const [languagesLoading, setLoading] = useState<boolean>(true);
-  const [languagesError, setError] = useState<string | null>(null);
+  const [loadingLanguages, setLoading] = useState<boolean>(true);
+  const [errorLanguages, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +38,7 @@ const useLanguages = () => {
     fetchData();
   }, []);
 
-  return { languages, languagesLoading, languagesError };
+  return { languages, loadingLanguages, errorLanguages };
 };
 
 export default useLanguages;

@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import { getCredits } from '../api/ApiLinks';
 import type { CastMember, CrewMember } from '../types/movie';
 
-const useMovieCredits = () => {
+const useCredits = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [creditsLoading, setLoading] = useState<boolean>(true);
-  const [creditsError, setError] = useState<string | null>(null);
+  const [loadingCredits, setLoading] = useState<boolean>(true);
+  const [errorCredits, setError] = useState<string | null>(null);
   const [casts, setCasts] = useState<CastMember[]>([]);
   const [crews, setCrews] = useState<CrewMember[]>([]);
   useEffect(() => {
@@ -46,7 +46,7 @@ const useMovieCredits = () => {
     fetchData();
   }, [movieId]);
 
-  return { casts, crews, creditsLoading, creditsError };
+  return { casts, crews, loadingCredits, errorCredits };
 };
 
-export default useMovieCredits;
+export default useCredits;

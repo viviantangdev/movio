@@ -1,22 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieVideos } from '../api/ApiLinks';
+import { getVideo} from '../api/ApiLinks';
+import type { Video } from '../types/movie';
 
-interface Video {
-  id: string;
-  key: string;
-  site: string;
-  type: string;
-  official: boolean;
-}
-const useMovieVideos = () => {
+
+const useVideo = () => {
   const { movieId } = useParams<string>();
   const [movieTrailer, setMovieTrailer] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(getMovieVideos(Number(movieId))).then((response) => {
+      await axios.get(getVideo(Number(movieId))).then((response) => {
         const data: Video[] = response.data.results;
 
         // Find the official trailer, preferably from YouTube
@@ -37,4 +32,4 @@ const useMovieVideos = () => {
   return { movieTrailer };
 };
 
-export default useMovieVideos;
+export default useVideo;

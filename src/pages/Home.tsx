@@ -9,8 +9,9 @@ import useUpcoming from '../hooks/useUpcoming';
 import type { Movie } from '../types/movie';
 
 const Home = () => {
-  const { nowPlayingMovies, topRankedMovies, loading, error } = useNowPlaying();
-  const { upcomingMovies, upcomingLoading, upcomingError } = useUpcoming();
+  const { nowPlayingMovies, topRankedMovies, loadingMovies, errorMovies } =
+    useNowPlaying();
+  const { upcomingMovies, loadingUpcoming, errorUpcoming } = useUpcoming();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const filteredMovies: Movie[] = [
@@ -20,10 +21,8 @@ const Home = () => {
     movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <Loader />;
-  if (error) return <ErrorState error={error} />;
-  if (upcomingLoading) return <Loader />;
-  if (upcomingError) return <ErrorState error={error} />;
+  if (loadingMovies || loadingUpcoming) return <Loader />;
+  if (errorMovies || errorUpcoming) return <ErrorState error={errorMovies || errorUpcoming} />;
 
   return (
     <>
@@ -102,12 +101,14 @@ const Home = () => {
             </section>
           </div>
         ) : filteredMovies.length === 0 ? (
-              <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
-          <p className='text-lg font-medium text-zinc-300'>No matches found.</p>
-          <p className='text-sm text-zinc-500'>
-            Try searching for another movie title!
-          </p>
-        </div>
+          <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
+            <p className='text-lg font-medium text-zinc-300'>
+              No matches found.
+            </p>
+            <p className='text-sm text-zinc-500'>
+              Try searching for another movie title!
+            </p>
+          </div>
         ) : (
           <div className='flex flex-col gap-4'>
             <h2>Search results for '{searchTerm}'</h2>

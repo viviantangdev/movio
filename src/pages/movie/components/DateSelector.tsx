@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatDate, generateDates } from '../utils/format';
+import { formatDate, generateDates } from '../../../utils/format';
 
 const DateSelector = () => {
   const dates = generateDates(7);

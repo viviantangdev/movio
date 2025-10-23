@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getVideo} from '../api/ApiLinks';
+import { getVideo } from '../api/endpoints';
 import type { Video } from '../types/movie';
-
 
 const useVideo = () => {
   const { movieId } = useParams<string>();

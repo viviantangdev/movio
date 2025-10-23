@@ -1,16 +1,16 @@
 import { useRef } from 'react';
 import { IoPlay, IoStarSharp, IoTicket, IoTimeOutline } from 'react-icons/io5';
-import heroUrl from '../assets/hero.jpg';
-import BuyTickets from '../components/BuyTickets';
-import ErrorState from '../components/ErrorState';
-import Loader from '../components/Loader';
-import Modal from '../components/Modal';
-import useCredits from '../hooks/useCredits';
-import useLanguages from '../hooks/useLanguages';
-import useMovie from '../hooks/useMovie';
-import useVideo from '../hooks/useVideo';
-import type { Language, MovieData } from '../types/movie';
-import { formatRuntime } from '../utils/format';
+import heroUrl from '../../assets/hero.jpg';
+import useCredits from '../../hooks/useCredits';
+import useLanguages from '../../hooks/useLanguages';
+import useMovie from '../../hooks/useMovie';
+import useVideo from '../../hooks/useVideo';
+import ErrorState from '../../shared/components/ErrorState';
+import Loader from '../../shared/components/Loader';
+import type { Language, MovieData } from '../../types/movie';
+import { formatRuntime } from '../../utils/format';
+import BuyTickets from './components/BuyTickets';
+import Modal from './components/Modal';
 
 const Movie = () => {
   const { movie, loadingMovie, errorMovie } = useMovie();
@@ -31,7 +31,10 @@ const Movie = () => {
     scrollToBuyTicket();
   };
 
-  const getOriginalLanguage = (movie: MovieData, languages: Language[]): string => {
+  const getOriginalLanguage = (
+    movie: MovieData,
+    languages: Language[]
+  ): string => {
     const iso = movie.original_language;
     const found = languages.find((l) => l.iso_639_1 === iso);
     return found?.english_name ?? 'Unknown';
@@ -70,9 +73,7 @@ const Movie = () => {
               </div>
               <div className='flex items-center gap-1'>
                 <IoTimeOutline />
-                <span className='text-sm'>
-                  {formatRuntime(movie.runtime)}
-                </span>
+                <span className='text-sm'>{formatRuntime(movie.runtime)}</span>
               </div>
               <div className='flex flex-wrap gap-2 mt-2'>
                 {movie.genres.map((genre) => (

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { IoClose, IoSearchOutline, IoTimeOutline } from 'react-icons/io5';
-import useGenre from '../hooks/useGenre';
+import useGenre from '../../hooks/useGenre';
 
-import ErrorState from '../components/ErrorState';
-import Loader from '../components/Loader';
-import useInTheather from '../hooks/useInTheather';
-import { formatRuntime } from '../utils/format';
+import useInTheather from '../../hooks/pages/useInTheather';
+import ErrorState from '../../shared/components/ErrorState';
+import Loader from '../../shared/components/Loader';
+import { formatRuntime } from '../../utils/format';
 
 interface TImeSlots {
   time: string;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getLanguages } from '../api/ApiLinks';
+import { getLanguages } from '../api/endpoints';
 import type { Language } from '../types/movie';
 
 const useLanguages = () => {

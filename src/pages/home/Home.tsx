@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import heroUrl from '../assets/hero.jpg';
-import ErrorState from '../components/ErrorState';
-import Loader from '../components/Loader';
-import MovieCard from '../components/MovieCard';
-import useNowPlaying from '../hooks/useNowPlaying';
-import useUpcoming from '../hooks/useUpcoming';
-import type {  MovieData } from '../types/movie';
+import heroUrl from '../../assets/hero.jpg';
+import useNowPlaying from '../../hooks/useNowPlaying';
+import useUpcoming from '../../hooks/useUpcoming';
+import ErrorState from '../../shared/components/ErrorState';
+import Loader from '../../shared/components/Loader';
+import type { MovieData } from '../../types/movie';
+import MovieCard from './components/MovieCard';
 
 const Home = () => {
   const { nowPlayingMovies, topRankedMovies, loadingMovies, errorMovies } =

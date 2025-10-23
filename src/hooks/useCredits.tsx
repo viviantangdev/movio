@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCredits } from '../api/ApiLinks';
+import { getCredits } from '../api/endpoints';
 import type { CastMember, CrewMember } from '../types/movie';
 
 const useCredits = () => {
@@ -27,9 +27,10 @@ const useCredits = () => {
         setCasts(cast || []);
 
         const crew: CrewMember[] = response.data.crew;
-        const crewDirectors = crew.filter((member) => member.job === 'Director');
+        const crewDirectors = crew.filter(
+          (member) => member.job === 'Director'
+        );
         setCrews(crewDirectors);
-
       } catch (error) {
         if (axios.isCancel(error)) return; // Request was canceled
         if (axios.isAxiosError(error)) {

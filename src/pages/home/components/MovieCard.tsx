@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import heroUrl from '../assets/hero.jpg';
-import type { MovieData } from '../types/movie';
+import heroUrl from '../../../assets/hero.jpg';
+import type { MovieData } from '../../../types/movie';
 import Rating from './Rating';
 
 type MovieType = 'default' | 'top' | 'upcoming';

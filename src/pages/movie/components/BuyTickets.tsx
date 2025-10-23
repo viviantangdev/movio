@@ -1,7 +1,8 @@
 import { IoTicket } from 'react-icons/io5';
 import DateSelector from './DateSelector';
-import SeatSelector from './SeatSelector';
 import TimeSelector from './TimeSelector';
+import SeatSelector from './SeatSelector';
+
 
 const BuyTickets = () => {
   return (

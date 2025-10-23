@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getUpcoming } from '../api/ApiLinks';
+import { getUpcoming } from '../api/endpoints';
 import type { MovieData } from '../types/movie';
 
 const useUpcoming = () => {

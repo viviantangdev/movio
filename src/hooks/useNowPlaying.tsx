@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getNowPlaying } from '../api/ApiLinks';
+import { getNowPlaying } from '../api/endpoints';
 import type { MovieData } from '../types/movie';
 
 const useNowPlaying = () => {

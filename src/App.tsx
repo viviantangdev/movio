@@ -1,11 +1,11 @@
 import ReactModal from 'react-modal';
 import { Navigate, Route, Routes } from 'react-router';
 import './App.css';
-import Navbar from './components/Navbar';
-import ScrollToTopButton from './components/ScrollToTopButton';
-import Home from './pages/Home';
-import InTheather from './pages/InTheather';
-import Movie from './pages/Movie';
+import Navbar from './shared/components/Navbar';
+import ScrollToTopButton from './shared/components/ScrollToTopButton';
+import Home from './pages/home/Home';
+import InTheather from './pages/inTheather/InTheather';
+import Movie from './pages/movie/Movie';
 
 ReactModal.setAppElement('#root');
 

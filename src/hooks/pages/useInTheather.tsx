@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import type { MovieData } from '../types/movie';
 import axios from 'axios';
-import { getMovie, getNowPlaying } from '../api/ApiLinks';
+import { useEffect, useState } from 'react';
+import { getMovie, getNowPlaying } from '../../api/endpoints';
+import type { MovieData } from '../../types/movie';
 
 const useInTheather = () => {
   const [inTheather, setInTheather] = useState<MovieData[]>([]);
@@ -37,7 +37,7 @@ const useInTheather = () => {
         } else if (err instanceof Error) {
           setError(err.message);
         } else {
-          setError("An unknown error occurred");
+          setError('An unknown error occurred');
         }
       } finally {
         setLoading(false);
@@ -50,4 +50,4 @@ const useInTheather = () => {
   return { inTheather, loadingInTheather, errorInTheather };
 };
 
-export default useInTheather
+export default useInTheather;

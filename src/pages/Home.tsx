@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import heroUrl from '../assets/hero.jpg';
 import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import MovieCard from '../components/MovieCard';
 import useNowPlaying from '../hooks/useNowPlaying';
 import useUpcoming from '../hooks/useUpcoming';
-import type { Movie } from '../types/movie';
+import type {  MovieData } from '../types/movie';
 
 const Home = () => {
   const { nowPlayingMovies, topRankedMovies, loadingMovies, errorMovies } =
@@ -14,7 +15,7 @@ const Home = () => {
   const { upcomingMovies, loadingUpcoming, errorUpcoming } = useUpcoming();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const filteredMovies: Movie[] = [
+  const filteredMovies: MovieData[] = [
     ...nowPlayingMovies,
     ...upcomingMovies,
   ].filter((movie) =>
@@ -22,34 +23,46 @@ const Home = () => {
   );
 
   if (loadingMovies || loadingUpcoming) return <Loader />;
-  if (errorMovies || errorUpcoming) return <ErrorState error={errorMovies || errorUpcoming} />;
+  if (errorMovies || errorUpcoming)
+    return <ErrorState error={errorMovies || errorUpcoming} />;
 
   return (
     <>
+      {/*Hero section */}
+      <div className='relative h-[350px]'>
+        <img
+          src={heroUrl}
+          alt='Cinema Movio'
+          className='w-full h-full object-cover opacity-70'
+        />
+        {/*Search bar */}
+        <div className='absolute inset-0 flex flex-col justify-center items-center gap-7'>
+          <p>What movie do you want to watch?</p>
+          <div className='relative flex justify-between items-center w-2/3 group'>
+            <IoSearchOutline className='absolute ml-3 pointer-events-none' />
+            <input
+              type='text'
+              name='search'
+              placeholder='Search movie'
+              autoComplete='off'
+              aria-label='Search movie'
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
+              className='w-full pr-3 pl-10'
+            />
+            <IoClose
+              className='absolute right-3 opacity-0 group-focus-within:opacity-100 transition-smooth cursor-pointer'
+              onClick={() => setSearchTerm('')}
+            >
+              clear
+            </IoClose>
+          </div>
+        </div>
+      </div>
       {/*Main section */}
       <main className=' p-7 flex flex-col gap-8'>
-        {/*Search bar */}
-        <div className='relative flex items-center group'>
-          <IoSearchOutline className='absolute ml-3 pointer-events-none' />
-          <input
-            type='text'
-            name='search'
-            placeholder='Search movie'
-            autoComplete='off'
-            aria-label='Search movie'
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            className='w-full pr-3 pl-10'
-          />
-          <IoClose
-            className='absolute right-3 opacity-0 group-focus-within:opacity-100 transition-smooth cursor-pointer'
-            onClick={() => setSearchTerm('')}
-          >
-            clear
-          </IoClose>
-        </div>
         {searchTerm === '' ? (
           <div>
             {/*Top ranked */}
@@ -70,7 +83,7 @@ const Home = () => {
             <section className='flex flex-col gap-4'>
               <div className='flex justify-between items-end'>
                 <h2>In theather</h2>
-                <Link to='movies'>
+                <Link to='intheather'>
                   <span className='text-emerald-400'>See all</span>
                 </Link>
               </div>

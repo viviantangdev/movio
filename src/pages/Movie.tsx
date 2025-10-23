@@ -1,6 +1,7 @@
 import { useRef } from 'react';
-import { IoPlay, IoStarSharp, IoTicket } from 'react-icons/io5';
+import { IoPlay, IoStarSharp, IoTicket, IoTimeOutline } from 'react-icons/io5';
 import heroUrl from '../assets/hero.jpg';
+import BuyTickets from '../components/BuyTickets';
 import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
@@ -8,9 +9,8 @@ import useCredits from '../hooks/useCredits';
 import useLanguages from '../hooks/useLanguages';
 import useMovie from '../hooks/useMovie';
 import useVideo from '../hooks/useVideo';
-import type { Language, Movie } from '../types/movie';
+import type { Language, MovieData } from '../types/movie';
 import { formatRuntime } from '../utils/format';
-import BuyTickets from './BuyTickets';
 
 const Movie = () => {
   const { movie, loadingMovie, errorMovie } = useMovie();
@@ -31,7 +31,7 @@ const Movie = () => {
     scrollToBuyTicket();
   };
 
-  const getOriginalLanguage = (movie: Movie, languages: Language[]): string => {
+  const getOriginalLanguage = (movie: MovieData, languages: Language[]): string => {
     const iso = movie.original_language;
     const found = languages.find((l) => l.iso_639_1 === iso);
     return found?.english_name ?? 'Unknown';
@@ -68,9 +68,12 @@ const Movie = () => {
                   <p className='text-sm'>{movie.vote_average.toFixed(1)}</p>
                 </div>
               </div>
-              <span className='text-sm'>
-                {movie.runtime && formatRuntime(movie.runtime)}
-              </span>
+              <div className='flex items-center gap-1'>
+                <IoTimeOutline />
+                <span className='text-sm'>
+                  {formatRuntime(movie.runtime)}
+                </span>
+              </div>
               <div className='flex flex-wrap gap-2 mt-2'>
                 {movie.genres.map((genre) => (
                   <span key={genre.id} className='text-sm'>
@@ -101,7 +104,7 @@ const Movie = () => {
               className='primaryButton flex items-center gap-2 '
             >
               <IoTicket />
-              Buy tickets
+              Buy ticket
             </button>
           </div>
         </div>

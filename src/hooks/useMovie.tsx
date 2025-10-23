@@ -2,11 +2,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovie } from '../api/ApiLinks';
-import type { Movie } from '../types/movie';
+import type {  MovieData } from '../types/movie';
 
 const useMovie = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [movie, setMovie] = useState<MovieData | null>(null);
   const [loadingMovie, setLoading] = useState<boolean>(true);
   const [errorMovie, setError] = useState<string | null>(null);
 

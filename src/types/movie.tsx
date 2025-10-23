@@ -1,15 +1,18 @@
 export interface Movie {
   id: number;
+}
+
+export interface MovieData extends Movie {
   title: string;
   poster_path: string;
   release_date: string;
   vote_average: number;
-  genres: Genre[];
   backdrop_path: string;
-  runtime: number;
   overview: string;
   original_title: string;
   original_language: string;
+  genres: Genre[];
+  runtime: number;
 }
 
 export interface CastMember {

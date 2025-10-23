@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getUpcoming } from '../api/ApiLinks';
-import type { Movie } from '../types/movie';
+import type { MovieData } from '../types/movie';
 
 const useUpcoming = () => {
-  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = useState<MovieData[]>([]);
   const [loadingUpcoming, setLoading] = useState<boolean>(true);
   const [errorUpcoming, setError] = useState<string | null>(null);
 
@@ -25,14 +25,14 @@ const useUpcoming = () => {
         const today = new Date();
 
         // Filter for movies releasing today or later
-        const filtered = data.filter((movie: Movie) => {
+        const filtered = data.filter((movie: MovieData) => {
           const releaseDate = new Date(movie.release_date);
           return releaseDate >= today;
         });
 
         // Sort by relese date (newest first)
         const sorted = filtered.sort(
-          (a: Movie, b: Movie) =>
+          (a: MovieData, b: MovieData) =>
             new Date(a.release_date).getTime() -
             new Date(b.release_date).getTime()
         );

@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getNowPlaying } from '../api/ApiLinks';
-import type { Movie } from '../types/movie';
+import type { MovieData } from '../types/movie';
 
 const useNowPlaying = () => {
-  const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]);
-  const [topRankedMovies, setTopRankedMovies] = useState<Movie[]>([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<MovieData[]>([]);
+  const [topRankedMovies, setTopRankedMovies] = useState<MovieData[]>([]);
   const [loadingMovies, setLoading] = useState<boolean>(true);
   const [errorMovies, setError] = useState<string | null>(null);
 
@@ -23,13 +23,13 @@ const useNowPlaying = () => {
         const data = response.data.results;
 
         // Sort by A to Z
-        const sortedAtoZ = [...data].sort((a: Movie, b: Movie) =>
+        const sortedAtoZ = [...data].sort((a: MovieData, b: MovieData) =>
           a.title.localeCompare(b.title)
         );
 
         // Sort by vote ranking
         const sortedRanking = [...data].sort(
-          (a: Movie, b: Movie) => b.vote_average - a.vote_average
+          (a: MovieData, b: MovieData) => b.vote_average - a.vote_average
         );
 
         setNowPlayingMovies(sortedAtoZ);

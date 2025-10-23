@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import heroUrl from '../assets/hero.jpg';
-import type { Movie } from '../types/movie';
+import type { MovieData } from '../types/movie';
 import Rating from './Rating';
 
 type MovieType = 'default' | 'top' | 'upcoming';
 
 interface MovieCardProps {
   index: number;
-  movie: Movie;
+  movie: MovieData;
   movieType: MovieType;
 }
 

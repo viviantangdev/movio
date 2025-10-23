@@ -5,6 +5,7 @@ import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import useLanguages from '../hooks/useLanguages';
+import useActors from '../hooks/useMovieActors';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
 import type { Languages, MovieDetails } from '../types/movie';
@@ -13,29 +14,31 @@ import BuyTickets from './BuyTickets';
 
 const Movie = () => {
   const { movieDetails, loading, error } = useMovieDetails();
+  const { actors, actorsLoading, actorsError } = useActors();
   const { languages, languagesLoading, languagesError } = useLanguages();
   const { movieTrailer } = useMovieVideos();
   const navigate = useNavigate();
 
+  if (loading || languagesLoading || actorsLoading) return <Loader />;
+  if (!movieDetails || error || languagesError || actorsError)
+    return <ErrorState error={error} />;
+
   const handleBuyTickets = () => {
-    navigate(`/movies/${movieDetails?.id}/ticket`);
+    navigate(`/movies/${movieDetails.id}/ticket`);
   };
 
   const getOriginalLanguage = (
-    movieDetails: MovieDetails | null | undefined,
+    movieDetails: MovieDetails,
     languages: Languages[]
   ): string => {
-    const iso = movieDetails?.original_language;
+    const iso = movieDetails.original_language;
     if (!iso) return 'Unknown';
 
-    const found = languages.find((l) => l.iso_639_1 === iso);
+    const found = languages.find((l) => l.iso === iso);
     return found?.english_name ?? 'Unknown';
   };
 
   const originalLanguage = getOriginalLanguage(movieDetails, languages);
-
-  if (loading || languagesLoading) return <Loader />;
-  if (error || languagesError) return <ErrorState error={error} />;
 
   return (
     <div>
@@ -43,35 +46,35 @@ const Movie = () => {
         <div
           className='h-full w-full bg-cover bg-center opacity-15'
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails?.backdrop_path})`,
+            backgroundImage: `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
           }}
         />
         <div className='absolute bottom-0 p-7 space-y-3'>
           <div className='flex items-end gap-3'>
             <img
               src={
-                movieDetails?.poster_path
-                  ? `https://image.tmdb.org/t/p/w500${movieDetails?.poster_path}`
+                movieDetails.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
                   : heroUrl
               }
-              alt={movieDetails?.title}
+              alt={movieDetails.title}
               className='rounded-xl h-40'
             />
             <div>
               <div className='flex flex-wrap items-center gap-2'>
-                <h2>{movieDetails?.title}</h2>
+                <h2>{movieDetails.title}</h2>
                 <div className='flex items-center gap-0.5'>
                   <IoStarSharp className='text-emerald-400' />
                   <p className='text-sm'>
-                    {movieDetails?.vote_average.toFixed(1)}
+                    {movieDetails.vote_average.toFixed(1)}
                   </p>
                 </div>
               </div>
               <span className='text-sm'>
-                {movieDetails?.runtime && formatRuntime(movieDetails?.runtime)}
+                {movieDetails.runtime && formatRuntime(movieDetails.runtime)}
               </span>
               <div className='flex flex-wrap gap-2 mt-2'>
-                {movieDetails?.genres.map((genre) => (
+                {movieDetails.genres.map((genre) => (
                   <span key={genre.id} className='text-sm'>
                     {genre.name}
                   </span>
@@ -107,13 +110,13 @@ const Movie = () => {
       </div>
 
       <div className='flex flex-col gap-7 p-7'>
-        <p className='mt-5'>{movieDetails?.overview}</p>
+        <p className='mt-5'>{movieDetails.overview}</p>
         <div className='flex flex-col gap-2'>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>
               Original title:
             </span>
-            <p>{movieDetails?.original_title}</p>
+            <p>{movieDetails.original_title}</p>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>
@@ -121,9 +124,16 @@ const Movie = () => {
             </span>
             <p>{originalLanguage}</p>
           </div>
+
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Release date:</span>
-            <p>{movieDetails?.release_date}</p>
+            <p>{movieDetails.release_date}</p>
+          </div>
+          <div className='flex flex-col gap-1'>
+            <span className='font-extralight text-gray-400'>Actors:</span>
+            {actors.map((actor, index) => (
+              <p key={index}>{actor.name}</p>
+            ))}
           </div>
         </div>
       </div>

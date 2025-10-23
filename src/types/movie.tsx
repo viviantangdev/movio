@@ -15,12 +15,17 @@ export interface MovieDetails extends Movie {
   original_language:string;
 }
 
+export interface MovieActors extends Movie {
+  name: string;
+  character: string;
+}
+
 export interface Genre {
   id: number;
   name: string;
 }
 
 export interface Languages {
-  iso_639_1: string;
+  iso: string;
   english_name: string;
 }

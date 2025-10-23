@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {  useParams } from 'react-router-dom';
-import { getMovieDetails } from '../api/ApiLinks';
-import type { MovieDetails } from '../types/movie';
+import { useParams } from 'react-router-dom';
+import { getCasts } from '../api/ApiLinks';
+import type { MovieActors } from '../types/movie';
 
-const useMovieDetails = () => {
+const useMovieActors = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [actors, setActors] = useState<MovieActors[]>([]);
+  const [actorsLoading, setLoading] = useState<boolean>(true);
+  const [actorsError, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!movieId) return;
@@ -21,8 +21,8 @@ const useMovieDetails = () => {
         // throw new Error('Network Error: Failed to connect');
         // throw new Error('404 Not Found');
         // throw new Error('Something unexpected happened');
-        const response = await axios.get(getMovieDetails(Number(movieId)));
-        setMovieDetails(response.data);
+        const response = await axios.get(getCasts(Number(movieId)));
+        setActors(response.data.cast || []);
       } catch (error) {
         if (axios.isCancel(error)) return; // Request was canceled
         if (axios.isAxiosError(error)) {
@@ -39,7 +39,7 @@ const useMovieDetails = () => {
     fetchData();
   }, [movieId]);
 
-  return { movieDetails, loading, error };
+  return { actors, actorsLoading, actorsError };
 };
 
-export default useMovieDetails;
+export default useMovieActors;

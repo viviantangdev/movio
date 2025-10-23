@@ -2,11 +2,17 @@ import { useState } from 'react';
 import { IoClose, IoSearchOutline, IoTimeOutline } from 'react-icons/io5';
 import useGenre from '../hooks/useGenre';
 
-import { IoTicket } from 'react-icons/io5';
 import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import useInTheather from '../hooks/useInTheather';
 import { formatRuntime } from '../utils/format';
+
+interface TImeSlots {
+  time: string;
+  status: Status;
+}
+
+type Status = 'full' | 'available';
 
 const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -15,6 +21,12 @@ const InTheather = () => {
 
   if (loadingInTheather) return <Loader />;
   if (errorInTheather) return <ErrorState error={errorInTheather} />;
+
+  const timeSlots: TImeSlots[] = [
+    { time: '15:00', status: 'available' },
+    { time: '18:00', status: 'full' },
+    { time: '21:00', status: 'full' },
+  ];
 
   return (
     <div className='p-7 flex flex-col gap-7'>
@@ -49,11 +61,13 @@ const InTheather = () => {
         </div>
       </div>
       {/*Movies  */}
-      <ul className='w-full'>
+
+      <ul className='w-full divide-amber-300 divide-y'>
         {inTheather.map((movie, index) => (
-          <li key={index}>
-            <div className='flex justify-between items-end'>
-              <div className='flex items-end gap-2'>
+          <li key={index} className='py-9'>
+            <div className='flex justify-between items-center'>
+              {/*Movie */}
+              <div className='flex items-end gap-2 bg-amber-500'>
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
@@ -76,18 +90,27 @@ const InTheather = () => {
                   </div>
                 </div>
               </div>
-              <span>Available</span>
-              <button
-                type='button'
-                className='primaryButton flex justify-center items-center gap-2'
-                aria-label='Buy ticket'
-              >
-                <IoTicket />
-                Buy ticket
-              </button>
+              {/*Timeslot */}
+              <div className='flex flex-col bg-amber-700 gap-7'>
+                {timeSlots.map((time, index) => (
+                  <div
+                    key={index}
+                    className='flex justify-between items-center gap-6'
+                  >
+                    <span>{time.time}</span>
+                    <span
+                      className={`p-2 ${
+                        time.status === 'full'
+                          ? 'bg-transparent cursor-not-allowed'
+                          : 'primaryButton cursor-pointer rounded-xl'
+                      }`}
+                    >
+                      {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div className='w-full h-1 my-8 bg-zinc-900 ' />
           </li>
         ))}
       </ul>

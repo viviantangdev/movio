@@ -1,36 +1,37 @@
+import { useRef } from 'react';
 import { IoPlay, IoStarSharp, IoTicket } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
 import heroUrl from '../assets/hero.jpg';
 import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
-import useLanguages from '../hooks/useLanguages';
 import useCredits from '../hooks/useCredits';
+import useLanguages from '../hooks/useLanguages';
 import useMovie from '../hooks/useMovie';
+import useVideo from '../hooks/useVideo';
 import type { Language, Movie } from '../types/movie';
 import { formatRuntime } from '../utils/format';
 import BuyTickets from './BuyTickets';
-import useVideo from '../hooks/useVideo';
 
 const Movie = () => {
   const { movie, loadingMovie, errorMovie } = useMovie();
   const { casts, crews, loadingCredits, errorCredits } = useCredits();
   const { languages, loadingLanguages, errorLanguages } = useLanguages();
   const { movieTrailer } = useVideo();
-  const navigate = useNavigate();
+  const buyTicketSectionRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBuyTicket = () => {
+    buyTicketSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   if (loadingMovie || loadingCredits || loadingLanguages) return <Loader />;
   if (!movie || errorMovie || errorCredits || errorLanguages)
     return <ErrorState error={errorMovie || errorCredits || errorLanguages} />;
 
-  const handleBuyTickets = () => {
-    navigate(`/movies/${movie.id}/ticket`);
+  const handleBuyTicket = () => {
+    scrollToBuyTicket();
   };
 
-  const getOriginalLanguage = (
-    movie: Movie,
-    languages: Language[]
-  ): string => {
+  const getOriginalLanguage = (movie: Movie, languages: Language[]): string => {
     const iso = movie.original_language;
     const found = languages.find((l) => l.iso_639_1 === iso);
     return found?.english_name ?? 'Unknown';
@@ -40,6 +41,7 @@ const Movie = () => {
 
   return (
     <div>
+      {/*Movie hero */}
       <div className='relative h-130'>
         <div
           className='h-full w-full bg-cover bg-center opacity-15'
@@ -63,9 +65,7 @@ const Movie = () => {
                 <h2>{movie.title}</h2>
                 <div className='flex items-center gap-0.5'>
                   <IoStarSharp className='text-emerald-400' />
-                  <p className='text-sm'>
-                    {movie.vote_average.toFixed(1)}
-                  </p>
+                  <p className='text-sm'>{movie.vote_average.toFixed(1)}</p>
                 </div>
               </div>
               <span className='text-sm'>
@@ -97,7 +97,7 @@ const Movie = () => {
               />
             )}
             <button
-              onClick={handleBuyTickets}
+              onClick={handleBuyTicket}
               className='primaryButton flex items-center gap-2 '
             >
               <IoTicket />
@@ -106,7 +106,7 @@ const Movie = () => {
           </div>
         </div>
       </div>
-
+      {/*Movie info */}
       <div className='flex flex-col gap-7 p-7'>
         <p className='mt-5'>{movie.overview}</p>
         <div className='flex flex-col gap-2'>
@@ -129,19 +129,57 @@ const Movie = () => {
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Directors:</span>
-            {crews.map((director, index) => (
-              <p key={index}>{director.name}</p>
-            ))}
+            <div className='flex gap-2 overflow-x-auto'>
+              {crews.map((director, index) => (
+                <div
+                  key={index}
+                  className='flex flex-col gap-2 items-center w-[80px] flex-shrink-0'
+                >
+                  <img
+                    src={
+                      director.profile_path
+                        ? `https://image.tmdb.org/t/p/w500${director.profile_path}`
+                        : heroUrl
+                    }
+                    alt={director.name}
+                    className='rounded-xl w-[80px] h-[80px] object-cover'
+                  />
+                  <p className='text-xs text-center'>{director.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Actors:</span>
-            {casts.map((actor, index) => (
-              <p key={index}>{actor.name}</p>
-            ))}
+            <div className='flex gap-2 overflow-x-auto'>
+              {casts.map((actor, index) => (
+                <div
+                  key={index}
+                  className='flex flex-col gap-2 items-center w-[80px] flex-shrink-0'
+                >
+                  <img
+                    src={
+                      actor.profile_path
+                        ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
+                        : heroUrl
+                    }
+                    alt={actor.name}
+                    className='rounded-xl w-[80px] h-[80px] object-cover'
+                  />
+                  <p className='text-xs text-center'>{actor.name}</p>
+                  <p className='text-xs text-center'>({actor.character})</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <BuyTickets />
+      {/*Seperator */}
+      <div className='w-full h-1 bg-zinc-900 ' />
+      {/*But ticket */}
+      <div ref={buyTicketSectionRef}>
+        <BuyTickets />
+      </div>
     </div>
   );
 };

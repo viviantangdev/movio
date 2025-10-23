@@ -15,10 +15,12 @@ export interface Movie {
 export interface CastMember {
   name: string;
   character: string;
+  profile_path: string;
 }
 export interface CrewMember {
   job: string;
   name: string;
+  profile_path: string;
 }
 
 export interface Genre {

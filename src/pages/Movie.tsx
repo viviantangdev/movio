@@ -4,12 +4,16 @@ import heroUrl from '../assets/hero.jpg';
 import ErrorState from '../components/ErrorState';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
+import useLanguages from '../hooks/useLanguages';
 import useMovieDetails from '../hooks/useMovieDetails';
 import useMovieVideos from '../hooks/useMovieVideos';
+import type { Languages, MovieDetails } from '../types/movie';
 import { formatRuntime } from '../utils/format';
+import BuyTickets from './BuyTickets';
 
 const Movie = () => {
   const { movieDetails, loading, error } = useMovieDetails();
+  const { languages, languagesLoading, languagesError } = useLanguages();
   const { movieTrailer } = useMovieVideos();
   const navigate = useNavigate();
 
@@ -17,8 +21,21 @@ const Movie = () => {
     navigate(`/movies/${movieDetails?.id}/ticket`);
   };
 
-  if (loading) return <Loader />;
-  if (error) return <ErrorState error={error}/>;
+  const getOriginalLanguage = (
+    movieDetails: MovieDetails | null | undefined,
+    languages: Languages[]
+  ): string => {
+    const iso = movieDetails?.original_language;
+    if (!iso) return 'Unknown';
+
+    const found = languages.find((l) => l.iso_639_1 === iso);
+    return found?.english_name ?? 'Unknown';
+  };
+
+  const originalLanguage = getOriginalLanguage(movieDetails, languages);
+
+  if (loading || languagesLoading) return <Loader />;
+  if (error || languagesError) return <ErrorState error={error} />;
 
   return (
     <div>
@@ -86,9 +103,31 @@ const Movie = () => {
               Buy tickets
             </button>
           </div>
-          <p className='mt-5'>{movieDetails?.overview}</p>
         </div>
       </div>
+
+      <div className='flex flex-col gap-7 p-7'>
+        <p className='mt-5'>{movieDetails?.overview}</p>
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-1'>
+            <span className='font-extralight text-gray-400'>
+              Original title:
+            </span>
+            <p>{movieDetails?.original_title}</p>
+          </div>
+          <div className='flex flex-col gap-1'>
+            <span className='font-extralight text-gray-400'>
+              Original language:
+            </span>
+            <p>{originalLanguage}</p>
+          </div>
+          <div className='flex flex-col gap-1'>
+            <span className='font-extralight text-gray-400'>Release date:</span>
+            <p>{movieDetails?.release_date}</p>
+          </div>
+        </div>
+      </div>
+      <BuyTickets />
     </div>
   );
 };

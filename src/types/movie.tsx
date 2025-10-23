@@ -11,9 +11,16 @@ export interface MovieDetails extends Movie {
   backdrop_path: string;
   runtime: number;
   overview: string;
+  original_title: string;
+  original_language:string;
 }
 
 export interface Genre {
   id: number;
   name: string;
+}
+
+export interface Languages {
+  iso_639_1: string;
+  english_name: string;
 }

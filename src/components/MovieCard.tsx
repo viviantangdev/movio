@@ -30,7 +30,7 @@ const MovieCard = ({ index, movie, movieType }: MovieCardProps) => {
           </span>
           {movieType === 'upcoming' && (
             <span className='absolute bottom-0 left-0 right-0 bg-zinc-950/70 text-emerald-300 text-xs px-3 py-2'>
-              <p>Release: {movie.release_date}</p>
+              <p>Release date {movie.release_date}</p>
             </span>
           )}
         </div>

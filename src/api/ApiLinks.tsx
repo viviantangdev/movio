@@ -9,3 +9,4 @@ export const getMovieDetails = (movieId: number) =>
   `${baseUrl}/movie/${movieId}?api_key=${apiKey}`;
 export const getMovieVideos = (movieId: number) =>
   `${baseUrl}/movie/${movieId}/videos?api_key=${apiKey}`;
+export const getLanguages = `${baseUrl}/configuration/languages?api_key=${apiKey}`

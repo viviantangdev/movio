@@ -9,18 +9,19 @@ interface MovieCardProps {
   index: number;
   movie: MovieData;
   movieType: MovieType;
+  className?: string;
 }
 
 const MovieCard = ({ index, movie, movieType }: MovieCardProps) => {
   return (
     <Link to={`/movies/${movie.id}`}>
-      <div className='min-w-[100px] w-[200px] h-[360px] movieCard'>
+      <div className='movieCard h-[360px]'>
         <div key={movie.id} className='relative'>
           {movie.poster_path ? (
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={`${movie.title} poster`}
-              className='h-[300px] w-full object-cover [mask-image:linear-gradient(to_bottom,black_85%,transparent)]'
+              className='max-h-[300px] w-full object-cover [mask-image:linear-gradient(to_bottom,black_85%,transparent)]'
             />
           ) : (
             <img src={heroUrl} alt={`${movie.title} poster`} />

@@ -43,7 +43,7 @@ const Movie = () => {
   const originalLanguage = getOriginalLanguage(movie, languages);
 
   return (
-    <div>
+    <>
       {/*Movie hero */}
       <div className='relative h-130'>
         <div
@@ -184,7 +184,7 @@ const Movie = () => {
       <div ref={buyTicketSectionRef}>
         <BuyTickets />
       </div>
-    </div>
+    </>
   );
 };
 

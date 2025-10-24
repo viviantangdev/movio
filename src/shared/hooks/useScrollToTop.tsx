@@ -16,7 +16,7 @@ const useScrollToTop = () => {
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
-  // ✅ Scroll to top handler
+  // Scroll to top handler
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

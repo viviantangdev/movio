@@ -43,7 +43,7 @@ input {
   @apply bg-zinc-900 py-2 text-zinc-50
    placeholder-zinc-500 rounded-xl 
    inset-shadow-sm shadow-2xs
-    border-none ring-2 ring-emerald-600 
+    border-none ring-2 ring-zinc-500 
     transition-smooth;
   &:hover {
     @apply outline-none ring-emerald-400;
@@ -52,6 +52,7 @@ input {
     @apply outline-none ring-emerald-400;
   }
 }
+
 
 .movieCard {
   @apply rounded-xl overflow-hidden bg-zinc-900 border-1 border-transparent transition-smooth;

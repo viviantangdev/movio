@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { IoClose, IoSearchOutline, IoTimeOutline } from 'react-icons/io5';
-import useGenre from '../../hooks/useGenre';
-
+import { IoTimeOutline } from 'react-icons/io5';
 import useInTheather from '../../hooks/pages/useInTheather';
+import useGenre from '../../hooks/useGenre';
+import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
+import type { MovieData } from '../../types/movie';
 import { formatRuntime } from '../../utils/format';
+import FilterSection from './components/FilterSection';
+import InTheatherHeroSection from './components/InTheatherHeroSection';
 
 interface TImeSlots {
   time: string;
@@ -17,6 +20,8 @@ type Status = 'full' | 'available';
 const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { genres } = useGenre();
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(['All']);
+
   const { inTheather, loadingInTheather, errorInTheather } = useInTheather();
 
   if (loadingInTheather) return <Loader />;
@@ -28,93 +33,101 @@ const InTheather = () => {
     { time: '21:00', status: 'full' },
   ];
 
-  return (
-    <div className='p-7 flex flex-col gap-7'>
-      <h2>In Theather</h2>
-      {/*Filter  */}
-      <div className='flex items-center gap-3'>
-        <div className='relative flex justify-between items-center w-1/3 group'>
-          <IoSearchOutline className='absolute ml-3 pointer-events-none' />
-          <input
-            type='text'
-            name='search'
-            placeholder='Search movie'
-            autoComplete='off'
-            aria-label='Search movie'
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            className='w-full pr-3 pl-10'
-          />
-          <IoClose
-            className='absolute right-3 opacity-0 group-focus-within:opacity-100 transition-smooth cursor-pointer'
-            onClick={() => setSearchTerm('')}
-          >
-            clear
-          </IoClose>
-        </div>
-        <div className='w-2/3 '>
-          {genres.map((g) => (
-            <p>{g.name}</p>
-          ))}
-        </div>
-      </div>
-      {/*Movies  */}
+  const filterMovies: MovieData[] = inTheather.filter((movie) => {
+    {
+      //Filter by searchTerm
+      const matchesSearch = movie.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-      <ul className='w-full divide-amber-300 divide-y'>
-        {inTheather.map((movie, index) => (
-          <li key={index} className='py-9'>
-            <div className='flex justify-between items-center'>
-              {/*Movie */}
-              <div className='flex items-end gap-2 bg-amber-500'>
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  className='h-[150px] object-cover'
-                />
-                <div>
-                  <p>{movie.title}</p>
-                  <div className='flex items-center gap-1'>
-                    <IoTimeOutline />
-                    <span className='text-sm'>
-                      {formatRuntime(movie.runtime)}
-                    </span>
-                  </div>
-                  <div className='flex flex-wrap gap-2 mt-2'>
-                    {movie.genres.map((genre) => (
-                      <span key={genre.id} className='text-sm'>
-                        {genre.name}
+      //Filter by genre
+      const isAllSelected = selectedGenres.includes('All');
+      const genreName = movie.genres.map((g) => g.name);
+      const matchesGenre =
+        isAllSelected ||
+        genreName.some((genreName) => selectedGenres.includes(genreName));
+
+      return matchesSearch && matchesGenre;
+    }
+  });
+
+  return (
+    <>
+      <InTheatherHeroSection />
+      <main>
+        {' '}
+        {/*Filter section */}
+        <FilterSection
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          genres={genres}
+          selectedGenres={selectedGenres}
+          onGenresChange={setSelectedGenres}
+        />
+        {/*List of movies */}
+        {filterMovies.length === 0 ? (
+          <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
+            <p className='text-lg font-medium text-zinc-300'>
+              No matches found.
+            </p>
+            <p className='text-sm text-zinc-500'>
+              Try searching for another movie title!
+            </p>
+          </div>
+        ) : (
+          <Accordion
+            items={filterMovies.map((movie) => ({
+              header: (
+                <div className='flex items-end gap-2'>
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    className='h-[150px] object-cover'
+                  />
+                  <div className='flex flex-col items-start py-2'>
+                    <p>{movie.title}</p>
+                    <div className='flex items-center gap-1'>
+                      <IoTimeOutline />
+                      <span className='text-sm'>
+                        {formatRuntime(movie.runtime)}
                       </span>
-                    ))}
+                    </div>
+                    <div className='flex flex-wrap gap-2 mt-2'>
+                      {movie.genres.map((genre) => (
+                        <span key={genre.id} className='text-sm'>
+                          {genre.name}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/*Timeslot */}
-              <div className='flex flex-col bg-amber-700 gap-7'>
-                {timeSlots.map((time, index) => (
-                  <div
-                    key={index}
-                    className='flex justify-between items-center gap-6'
-                  >
-                    <span>{time.time}</span>
-                    <span
-                      className={`p-2 ${
-                        time.status === 'full'
-                          ? 'bg-transparent cursor-not-allowed'
-                          : 'primaryButton cursor-pointer rounded-xl'
-                      }`}
+              ),
+              content: (
+                <div className='flex flex-col gap-7 '>
+                  {timeSlots.map((time, index) => (
+                    <div
+                      key={index}
+                      className='flex justify-between items-center gap-6'
                     >
-                      {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+                      <span>{time.time}</span>
+                      <span
+                        className={`p-2 ${
+                          time.status === 'full'
+                            ? 'bg-transparent cursor-not-allowed'
+                            : 'primaryButton cursor-pointer rounded-xl'
+                        }`}
+                      >
+                        {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ),
+            }))}
+          />
+        )}
+      </main>
+    </>
   );
 };
 

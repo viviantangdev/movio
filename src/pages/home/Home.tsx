@@ -4,7 +4,7 @@ import useUpcoming from '../../hooks/useUpcoming';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
 import type { MovieData } from '../../types/movie';
-import FilteredSection from './components/FilteredSection';
+import FilteredMovieSection from './components/FilteredMoviesSection';
 import HomeHeroSection from './components/HomeHeroSection';
 import InTheathersection from './components/InTheathersection';
 import TopRankedSection from './components/TopRankedSection';
@@ -33,8 +33,7 @@ const Home = () => {
       {/*Hero section */}
       <HomeHeroSection searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       {/*Main section */}
-      {/* <main className=' p-7 flex flex-col'> */}
-      <main className='w-[90%] md:w-[80%] 2xl:w-[50%] max-w-7xl mx-auto py-7'>
+      <main >
         {searchTerm === '' ? (
           <div className='flex flex-col gap-16 my-8'>
             {/*Top ranked */}
@@ -54,7 +53,7 @@ const Home = () => {
             </p>
           </div>
         ) : (
-          <FilteredSection searchTerm={searchTerm} data={filteredMovies} />
+          <FilteredMovieSection searchTerm={searchTerm} data={filteredMovies} />
         )}
       </main>
     </>

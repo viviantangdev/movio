@@ -15,27 +15,31 @@ body {
 h2 {
   @apply uppercase text-xl;
 }
-
-button {
-  @apply cursor-pointer rounded-xl border
-  px-4 py-3 
-  transition-smooth;
-
+main {
+  @apply w-[90%] md:w-[80%] 2xl:w-[50%] max-w-7xl mx-auto py-7;
+}
+button{
+  @apply cursor-pointer;
+}
+.primaryButton {
+  @apply cursor-pointer rounded-xl ring-2 ring-emerald-500 
+  transition-smooth px-4 py-3  bg-emerald-500 text-zinc-900 border-emerald-400 shadow-lg;
+  &:hover {
+    @apply bg-emerald-400;
+  }
   &:focus {
     @apply outline-none ring-2 ring-emerald-500;
   }
 }
-.primaryButton {
-  @apply bg-emerald-500 text-zinc-900 border-emerald-400 shadow-lg;
-  &:hover {
-    @apply bg-emerald-400;
-  }
-}
 .secondaryButton {
-  @apply bg-zinc-900 border-zinc-800 text-zinc-300;
+  @apply cursor-pointer rounded-xl ring-2 ring-zinc-500 
+  transition-smooth px-4 py-3  bg-zinc-900 border-zinc-800 text-zinc-300;
 
   &:hover {
     @apply bg-emerald-400 border-emerald-400 text-zinc-900;
+  }
+  &:focus {
+    @apply outline-none ring-2 ring-emerald-500;
   }
 }
 
@@ -52,7 +56,6 @@ input {
     @apply outline-none ring-emerald-400;
   }
 }
-
 
 .movieCard {
   @apply rounded-xl overflow-hidden bg-zinc-900 border-1 border-transparent transition-smooth;

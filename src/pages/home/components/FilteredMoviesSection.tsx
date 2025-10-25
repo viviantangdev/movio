@@ -1,12 +1,12 @@
 import type { MovieData } from '../../../types/movie';
 import MovieCard from './MovieCard';
 
-type FilteredSectionProps = {
+type FilteredMovieSectionProps = {
   searchTerm: string;
   data: MovieData[];
 };
 
-const FilteredSection = ({ searchTerm, data }: FilteredSectionProps) => {
+const FilteredMovieSection = ({ searchTerm, data }: FilteredMovieSectionProps) => {
   return (
     <section className='flex flex-col gap-4'>
       <h2>Search results for '{searchTerm}'</h2>
@@ -26,4 +26,4 @@ const FilteredSection = ({ searchTerm, data }: FilteredSectionProps) => {
   );
 };
 
-export default FilteredSection;
+export default FilteredMovieSection;

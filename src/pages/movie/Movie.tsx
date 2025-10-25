@@ -7,10 +7,10 @@ import useMovie from '../../hooks/useMovie';
 import useVideo from '../../hooks/useVideo';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
+import Modal from '../../shared/components/Modal';
 import type { Language, MovieData } from '../../types/movie';
 import { formatRuntime } from '../../utils/format';
 import BuyTickets from './components/BuyTickets';
-import Modal from './components/Modal';
 
 const Movie = () => {
   const { movie, loadingMovie, errorMovie } = useMovie();
@@ -52,7 +52,7 @@ const Movie = () => {
             backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
           }}
         />
-        <div className='absolute bottom-0 p-7 space-y-3'>
+        <div className='inset-x-0 w-[90%] md:w-[80%] 2xl:w-[50%] max-w-7xl mx-auto absolute bottom-0 p-7 space-y-3'>
           <div className='flex items-end gap-3'>
             <img
               src={
@@ -87,7 +87,11 @@ const Movie = () => {
           <div className='flex gap-2'>
             {movieTrailer && (
               <Modal
-                button={{ icon: <IoPlay />, text: 'Play trailer' }}
+                button={{
+                  icon: <IoPlay />,
+                  text: 'Play trailer',
+                  className: 'secondaryButton',
+                }}
                 children={
                   <iframe
                     width='500px'
@@ -98,6 +102,7 @@ const Movie = () => {
                     className='rounded-xl shadow-lg'
                   />
                 }
+                header='Play trailer'
               />
             )}
             <button
@@ -111,7 +116,7 @@ const Movie = () => {
         </div>
       </div>
       {/*Movie info */}
-      <div className='flex flex-col gap-7 p-7'>
+      <main className='flex flex-col gap-7 p-7'>
         <p className='mt-5'>{movie.overview}</p>
         <div className='flex flex-col gap-2'>
           <div className='flex flex-col gap-1'>
@@ -177,7 +182,7 @@ const Movie = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
       {/*Seperator */}
       <div className='w-full h-1 bg-zinc-900 ' />
       {/*But ticket */}

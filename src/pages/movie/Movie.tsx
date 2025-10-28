@@ -1,31 +1,23 @@
 import heroUrl from '../../assets/hero.jpg';
-import useCredits from '../../hooks/useCredits';
-import useLanguages from '../../hooks/useLanguages';
 import useMovie from '../../hooks/useMovie';
-import useVideo from '../../hooks/useVideo';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
 import { getOriginalLanguage } from '../../utils/helpers';
 import MovieHeroSection from './components/MovieHeroSection';
 
 const Movie = () => {
-  const { movie, loadingMovie, errorMovie } = useMovie();
-  const { casts, crews, loadingCredits, errorCredits } = useCredits();
-  const { languages, loadingLanguages, errorLanguages } = useLanguages();
-  const { movieTrailer } = useVideo();
+  const { movie, video, languages, casts, crews, loadingMovie, errorMovie } =
+    useMovie();
 
-  if (loadingMovie || loadingCredits || loadingLanguages) return <Loader />;
-  if (!movie || errorMovie || errorCredits || errorLanguages)
-    return <ErrorState error={errorMovie || errorCredits || errorLanguages} />;
-
-
+  if (loadingMovie) return <Loader />;
+  if (!movie || errorMovie) return <ErrorState error={errorMovie} />;
 
   const originalLanguage = getOriginalLanguage(movie, languages);
 
   return (
     <>
       {/*Movie hero */}
-      <MovieHeroSection movie={movie} movieTrailer={movieTrailer} />
+      <MovieHeroSection movie={movie} movieTrailer={video} />
       {/*Movie info */}
       <main className='flex flex-col gap-7 p-7'>
         <p className='mt-5'>{movie.overview}</p>

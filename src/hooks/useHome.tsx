@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getNowPlaying, getUpcoming } from '../../api/endpoints';
-import type { MovieData } from '../../types/movie';
+import { getNowPlaying, getUpcoming } from '../api/endpoints';
+import type { MovieData } from '../types/movie';
 
 const useHome = () => {
   const [upcomingMovies, setUpcomingMovies] = useState<MovieData[]>([]);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useHome from '../../hooks/pages/useHome';
+import useHome from '../../hooks/useHome';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
 import type { MovieData } from '../../types/movie';

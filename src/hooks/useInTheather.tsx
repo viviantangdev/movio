@@ -5,8 +5,8 @@ import {
   getLanguages,
   getMovie,
   getNowPlaying,
-} from '../../api/endpoints';
-import type { Genre, Language, MovieData } from '../../types/movie';
+} from '../api/endpoints';
+import type { Genre, Language, MovieData } from '../types/movie';
 
 const useInTheather = () => {
   const [inTheather, setInTheather] = useState<MovieData[]>([]);
@@ -27,9 +27,8 @@ const useInTheather = () => {
           axios.get(getGenre),
         ]);
 
+        // --- NowPlaying ---
         const nowPlaying: MovieData[] = moviesRes.data.results;
-        const allLanguages: Language[] = langsRes.data;
-        const allGenres: Genre[] = genresRes.data.genres;
 
         // Fetch detailed info for each movie in parallel
         const movieData = await Promise.all(
@@ -43,6 +42,9 @@ const useInTheather = () => {
             }
           })
         );
+
+        // --- Languages ---
+        const allLanguages: Language[] = langsRes.data;
 
         // Extract unique language codes from movies
         const uniqueLangCodes = Array.from(
@@ -59,6 +61,9 @@ const useInTheather = () => {
             }
           );
         });
+
+        // --- Genres ---
+        const allGenres: Genre[] = genresRes.data.genres;
 
         // Get all genre IDs from now-playing movies
         const usedGenreIds = new Set<number>();

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import useInTheather from '../../hooks/pages/useInTheather';
+import useInTheather from '../../hooks/useInTheather';
 import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';

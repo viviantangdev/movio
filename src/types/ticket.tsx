@@ -1,5 +1,5 @@
-import { generateDates } from "../utils/format";
-import type { MovieData } from "./movie";
+import { generateDates } from '../utils/format';
+import type { MovieData } from './movie';
 
 type Status = 'full' | 'available';
 
@@ -20,9 +20,9 @@ export const timeSlots: TimeSlots[] = [
   { time: '21:00', status: 'full' },
 ];
 export const TICKET_PRICE = 100;
+export const TICKET_CURRENCY = '$';
 
-export   const dates = generateDates(7);
-
+export const dates = generateDates(7);
 
 export interface Showtime {
   time: string;

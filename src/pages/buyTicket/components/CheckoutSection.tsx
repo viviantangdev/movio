@@ -1,14 +1,15 @@
 import { IoTimeOutline } from 'react-icons/io5';
 import type { MovieData } from '../../../types/movie';
-import { TICKET_PRICE } from '../../../types/ticket';
+import { TICKET_CURRENCY, TICKET_PRICE } from '../../../types/ticket';
 import { formatRuntime } from '../../../utils/format';
+import CinemaCheckoutCardForm from './CheckoutForm';
 
 interface CheckoutSectionProps {
   movie: MovieData;
   selectedDate: string;
   selectedTime: string;
   selectedSeats: string[];
-  email: string;
+  // email: string;
 }
 
 const CheckoutSection = ({
@@ -16,11 +17,11 @@ const CheckoutSection = ({
   selectedDate,
   selectedTime,
   selectedSeats,
-  email,
+  // email,
 }: CheckoutSectionProps) => {
   return (
     <section className='flex flex-col gap-5 pb-15'>
-            <h2 className='text-xl font-semibold'>Summary and payment</h2>
+      <h2 className='text-xl font-semibold'>Summary and payment</h2>
 
       {/*Summary */}
       <div className='flex flex-col items-start bg-zinc-800 p-5 rounded-xl gap-3'>
@@ -49,7 +50,7 @@ const CheckoutSection = ({
           </div>
           {/*Seats*/}
           <div>
-            <span>{selectedSeats.length} seats:</span>
+            <span>{selectedSeats.length} x Seat:</span>
             <div className='flex flex-wrap gap-1'>
               {selectedSeats.map((seat, index) => (
                 <span>
@@ -59,48 +60,22 @@ const CheckoutSection = ({
               ))}
             </div>
           </div>
-          {/*Ticket total*/}
-          <div className='flex gap-3'>
-            <p>{selectedSeats.length} tickets</p>
-            <p>${selectedSeats.length * TICKET_PRICE}</p>
-          </div>
-          {/*Email*/}
-          <div className='flex flex-col'>
-            <span>Ticket delivery:</span>
-            <span>{email}</span>
-          </div>
+        
+ 
         </div>
       </div>
       {/*Payment */}
       <div className='flex flex-col items-start bg-zinc-800 p-5 rounded-xl gap-5'>
         <h2 className='text-xl font-semibold'>Payment</h2>
-        <div className='flex gap-3'>
-          <span>Total amount:</span>
-          <p>${selectedSeats.length * TICKET_PRICE}</p>
+          <div className='flex gap-3'>
+          <span>{selectedSeats.length} x Ticket:</span>
+          <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
         </div>
-        <form className='flex flex-col gap-2 w-full md:w-[500px]'>
-          <div className='flex flex-col gap-2'>
-            <label>Credit card number</label>
-            <input type='number' required className='w-full px-2 ' />
-          </div>
-          <div className='flex gap-3 w-full'>
-          <div className='flex flex-col gap-2 w-full'>
-              <label>Expiry date</label>
-              <input type='number' required className='w-full px-2' />
-            </div>
-          <div className='flex flex-col gap-2 w-full'>
-              <label>CCV</label>
-              <input type='number' required className='w-full px-2' />
-            </div>
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label>Name on card</label>
-            <input type='number' required className='w-full px-2' />
-          </div>
-        </form>
-        <button type='submit' className='primaryButton w-full md:w-1/5'>
-          Pay
-        </button>
+        <div className='flex gap-3 font-extrabold'>
+          <span>Total amount:</span>
+          <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
+        </div>
+        <CinemaCheckoutCardForm amount={selectedSeats.length * TICKET_PRICE}/>
       </div>
     </section>
   );

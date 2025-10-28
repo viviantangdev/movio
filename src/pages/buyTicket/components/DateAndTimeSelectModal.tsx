@@ -13,10 +13,10 @@ interface DateAndTimeConfig {
   onSelect: (value: string) => void;
 }
 
-interface DateAndTiimeSelectProps {
+interface DateAndTimeSelectProps {
   filters: Record<string, DateAndTimeConfig>;
 }
-const DateAndTiimeSelectModal = ({ filters }: DateAndTiimeSelectProps) => {
+const DateAndTimeSelectModal = ({ filters }: DateAndTimeSelectProps) => {
   const getItemClassName = (selected: boolean) => {
     return `cursor-pointer px-2 py-1 rounded-xl transition-smooth border-1
         ${
@@ -67,4 +67,4 @@ const DateAndTiimeSelectModal = ({ filters }: DateAndTiimeSelectProps) => {
   );
 };
 
-export default DateAndTiimeSelectModal;
+export default DateAndTimeSelectModal;

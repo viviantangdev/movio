@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
 import type { MovieData } from '../../../types/movie';
-import { dates, TICKET_PRICE, timeSlots } from '../../../types/ticket';
+import { dates, TICKET_CURRENCY, TICKET_PRICE, timeSlots } from '../../../types/ticket';
 import { formatDate, formatRuntime } from '../../../utils/format';
-import DateAndTiimeSelectModal from './DateAndTiimeSelectModal';
+import DateAndTiimeSelectModal from './DateAndTimeSelectModal';
 import SeatSelector from './SeatSelector';
 
-interface TicketSectionProps {
+interface BookingSectionProps {
   movie: MovieData;
   selectedDate: string;
   onSelectedDate: (value: string) => void;
@@ -14,10 +15,8 @@ interface TicketSectionProps {
   selectedSeats: string[];
   onSelectedSeats: (selected: string[]) => void;
   nextStep: () => void;
-  email: string;
-  onEmailChange: (value: string) => void;
 }
-const TicketSection = ({
+const BookingSection = ({
   movie,
   selectedDate,
   selectedTime,
@@ -26,9 +25,26 @@ const TicketSection = ({
   selectedSeats,
   onSelectedSeats,
   nextStep,
-  email,
-  onEmailChange,
-}: TicketSectionProps) => {
+}: BookingSectionProps) => {
+  const [errorSeats, setErrorSeats] = useState<string>('');
+
+  useEffect(() => {
+    if (selectedSeats.length > 0 && errorSeats) setErrorSeats('');
+  }, [selectedSeats, errorSeats]);
+
+  const handleNextStep = () => {
+    // reset existing errors
+    setErrorSeats('');
+
+    const hasSeats = selectedSeats.length > 0;
+
+    if (!hasSeats) {
+      setErrorSeats('Please select at least one seat');
+      return;
+    }
+
+    nextStep();
+  };
 
   return (
     <section className='flex flex-col gap-5'>
@@ -80,7 +96,9 @@ const TicketSection = ({
         />
       </div>
       <div className='flex flex-col items-start bg-zinc-800 p-5 rounded-xl'>
-        <h3 className='font-medium'>Select seat(s)</h3>
+        <h3 className='font-medium'>Select one or more seats</h3>
+        {errorSeats && <p className='text-red-500 text-sm'>{errorSeats}</p>}
+
         <div className='w-full'>
           <SeatSelector
             selectedSeats={selectedSeats}
@@ -90,33 +108,18 @@ const TicketSection = ({
       </div>
       <div className='flex justify-between items-start bg-zinc-800 p-5 rounded-xl'>
         <p>Ticket x {selectedSeats.length}</p>
-        <p>${selectedSeats.length * TICKET_PRICE}</p>
+        <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
       </div>
-      <div className='flex flex-col gap-3 items-start bg-zinc-800 p-5 rounded-xl'>
-        <p>Ticket delivery</p>
-        <span>For tickets and booking confirmation.</span>
-        <div className='flex flex-col w-full gap-2'>
-          <label>Email</label>
-          <input
-            type='email'
-            name='email'
-            placeholder='mail@example.com'
-            autoComplete='off'
-            aria-label='Email'
-            value={email}
-            onChange={(e) => {
-              onEmailChange(e.target.value);
-            }}
-            required
-            className='w-full px-2 md:w-[500px]'
-          />
-        </div>
-      </div>
-      <button type='submit' disabled={false} onClick={nextStep} className='primaryButton md:w-1/5'>
+
+      <button
+        type='submit'
+        onClick={handleNextStep}
+        className='primaryButton md:w-1/5'
+      >
         Checkout
       </button>
     </section>
   );
 };
 
-export default TicketSection;
+export default BookingSection;

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import useNowPlaying from '../../hooks/useNowPlaying';
-import useUpcoming from '../../hooks/useUpcoming';
+import useHome from '../../hooks/pages/useHome';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
 import type { MovieData } from '../../types/movie';
@@ -11,10 +10,13 @@ import TopRankedSection from './components/TopRankedSection';
 import UpcomingSection from './components/UpcomingSection';
 
 const Home = () => {
-  const { nowPlayingMovies, topRankedMovies, loadingMovies, errorMovies } =
-    useNowPlaying();
-  const { upcomingMovies, loadingUpcoming, errorUpcoming } = useUpcoming();
-
+  const {
+    upcomingMovies,
+    nowPlayingMovies,
+    topRankedMovies,
+    loadingHome,
+    errorHome,
+  } = useHome();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const filteredMovies: MovieData[] = [
@@ -24,16 +26,15 @@ const Home = () => {
     movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loadingMovies || loadingUpcoming) return <Loader />;
-  if (errorMovies || errorUpcoming)
-    return <ErrorState error={errorMovies || errorUpcoming} />;
+  if (loadingHome) return <Loader />;
+  if (errorHome) return <ErrorState error={errorHome} />;
 
   return (
     <>
       {/*Hero section */}
       <HomeHeroSection searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       {/*Main section */}
-      <main >
+      <main>
         {searchTerm === '' ? (
           <div className='flex flex-col gap-16 my-8'>
             {/*Top ranked */}

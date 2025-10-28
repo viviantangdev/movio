@@ -20,7 +20,7 @@ const useInTheather = () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch now-playing movies + language list in parallel
+        // Fetch now-playing movies + language + genre list in parallel
         const [moviesRes, langsRes, genresRes] = await Promise.all([
           axios.get(getNowPlaying),
           axios.get(getLanguages),

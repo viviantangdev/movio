@@ -1,8 +1,5 @@
-import { useState } from 'react';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import type { Genre, Language } from '../../../types/movie';
-import { formatDate, generateDates } from '../../../utils/format';
-import DateSelectModal from './DateSelectModal';
 import FilterSelectModal from './FilterSelectModal';
 
 interface FilterSectipnProps {
@@ -14,6 +11,9 @@ interface FilterSectipnProps {
   languages: Language[];
   selectedLanguages: string[];
   onLanguagesChange: React.Dispatch<React.SetStateAction<string[]>>;
+  allDates: string[];
+  selectedDate: string[];
+  onDateChange: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FilterSection = ({
@@ -25,13 +25,10 @@ const FilterSection = ({
   languages,
   selectedLanguages,
   onLanguagesChange,
+  allDates,
+  selectedDate,
+  onDateChange,
 }: FilterSectipnProps) => {
-
-  const dates = generateDates(7);
-  const [selectedDate, setSelectedDate] = useState<string>(
-    formatDate(dates[0])
-  );
-
   const handleSelect = (
     item: string,
     onChange: (update: (prev: string[]) => string[]) => void
@@ -73,19 +70,23 @@ const FilterSection = ({
   const handleClearTags = () => {
     onGenresChange(['All']);
     onLanguagesChange(['All']);
+    onDateChange(['All']);
   };
 
   return (
     <>
       {/*Date, filter and search movie */}
       <div className='flex items-center gap-2 py-5'>
-        <DateSelectModal
-          dates={dates}
-          selectedDate={selectedDate}
-          onSelect={setSelectedDate}
-        />
         <FilterSelectModal
           filters={{
+            dates: {
+              label: 'Dates',
+              data: allDates.map((g) => ({ id: g, name: g })),
+              selected: selectedDate,
+              onSelect: (date: string) => handleSelect(date, onDateChange),
+              isMulti: true,
+              hasAllOption: true,
+            },
             genres: {
               label: 'Genres',
               data: genres.map((g) => ({ id: g.id, name: g.name })),
@@ -131,14 +132,25 @@ const FilterSection = ({
       </div>
       {/*Selected filter tags */}
       {(!selectedGenres.includes('All') ||
-        !selectedLanguages.includes('All')) && (
-        <div className='flex gap-2 pb-5'>
+        !selectedLanguages.includes('All') ||
+        !selectedDate.includes('All')) && (
+        <div className='flex flex-wrap gap-2 pb-5'>
           <button
             onClick={() => handleClearTags()}
             className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 transition-smooth'
           >
             Clear
           </button>
+          {selectedDate
+            .filter((item) => item !== 'All') //Skip 'All'
+            .map((g) => (
+              <button
+                onClick={() => handleRemoveTag(g, selectedDate, onDateChange)}
+                className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl border-1 border-zinc-800 hover:border-zinc-700 transition-smooth'
+              >
+                {g} <IoClose />
+              </button>
+            ))}
           {selectedGenres
             .filter((item) => item !== 'All') //Skip 'All'
             .map((g) => (
@@ -153,8 +165,9 @@ const FilterSection = ({
             ))}
           {selectedLanguages
             .filter((item) => item !== 'All') //Skip 'All'
-            .map((l) => (
+            .map((l, index) => (
               <button
+                key={index}
                 onClick={() =>
                   handleRemoveTag(l, selectedLanguages, onLanguagesChange)
                 }

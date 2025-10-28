@@ -20,19 +20,6 @@ const BuyTicket = () => {
   if (loadingMovie) return <Loader />;
   if (!movie || errorMovie) return <ErrorState error={errorMovie} />;
 
-  // const checkIfAllFiled = () => {
-  //   if (
-  //     selectedSeats.length !== 0 &&
-  //     selectedDate !== '' &&
-  //     selectedTime !== ''
-  //   ) {
-  //     setIsAllFiled(true);
-  //     console.log('hej');
-  //   } else {
-  //     setIsAllFiled(false);
-  //   }
-  // };
-
   return (
     <main className='space-y-7'>
       <div className='flex items-center gap-2'>

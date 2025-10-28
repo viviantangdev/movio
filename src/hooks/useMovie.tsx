@@ -20,6 +20,7 @@ const useMovie = () => {
   const [casts, setCasts] = useState<CastMember[]>([]);
   const [crews, setCrews] = useState<CrewMember[]>([]);
 
+  
   useEffect(() => {
     if (!movieId) return;
 

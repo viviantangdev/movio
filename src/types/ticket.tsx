@@ -1,4 +1,5 @@
 import { generateDates } from "../utils/format";
+import type { MovieData } from "./movie";
 
 type Status = 'full' | 'available';
 
@@ -21,3 +22,16 @@ export const timeSlots: TimeSlots[] = [
 export const TICKET_PRICE = 100;
 
 export   const dates = generateDates(7);
+
+
+export interface Showtime {
+  time: string;
+  isFull: boolean;
+}
+
+export interface Schedule {
+  [date: string]: Showtime[]; // e.g., { "2025-10-28": [ { time: "13:00", isFull: false } ] }
+}
+export interface MovieWithSchedule extends MovieData {
+  schedule: Schedule;
+}

@@ -36,7 +36,7 @@ const FilterSelectModal = ({ filters }: FilterSelectModalProps) => {
         text: 'Filter',
         icon: <IoFilter />,
         className:
-          'bg-zinc-900 p-2 text-zinc-50 rounded-xl shadow-2xs border-none ring-2 ring-zinc-500 hover:ring-emerald-400 transition-smooth',
+          'bg-zinc-900 p-2 text-zinc-50 rounded-xl shadow-2xs border-none ring-2 ring-zinc-500 hover:ring-emerald-400transition-smooth',
       }}
       children={
         <div className='flex flex-col gap-4'>

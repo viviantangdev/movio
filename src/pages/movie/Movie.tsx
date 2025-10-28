@@ -41,7 +41,7 @@ const Movie = () => {
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Directors:</span>
-            <div className='flex gap-2 overflow-x-auto'>
+            <div className='flex flex-wrap gap-3'>
               {crews.map((director, index) => (
                 <div
                   key={index}
@@ -63,7 +63,7 @@ const Movie = () => {
           </div>
           <div className='flex flex-col gap-1'>
             <span className='font-extralight text-gray-400'>Actors:</span>
-            <div className='flex gap-2 overflow-x-auto'>
+            <div className='flex flex-wrap gap-3'>
               {casts.map((actor, index) => (
                 <div
                   key={index}
@@ -79,7 +79,6 @@ const Movie = () => {
                     className='rounded-xl w-[80px] h-[80px] object-cover'
                   />
                   <p className='text-xs text-center'>{actor.name}</p>
-                  <p className='text-xs text-center'>({actor.character})</p>
                 </div>
               ))}
             </div>

@@ -29,3 +29,13 @@ export const formatDate = (date: Date): string =>
     month: 'short',
     day: 'numeric',
   });
+
+
+  export function formatDateLabel(dateISO: string): string {
+  const date = new Date(dateISO);
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short', // Tue
+    month: 'short',   // Oct
+    day: 'numeric',   // 28
+  });
+}

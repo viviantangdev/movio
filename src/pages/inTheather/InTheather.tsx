@@ -5,9 +5,8 @@ import useInTheather from '../../hooks/useInTheather';
 import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
-import type { MovieData } from '../../types/movie';
-import type { TimeSlots } from '../../types/ticket';
-import { formatRuntime } from '../../utils/format';
+import type { MovieWithSchedule } from '../../types/ticket';
+import { formatDateLabel, formatRuntime } from '../../utils/format';
 import { getOriginalLanguage } from '../../utils/helpers';
 import FilterSection from './components/FilterSection';
 import InTheatherHeroSection from './components/InTheatherHeroSection';
@@ -16,20 +15,21 @@ const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedGenres, setSelectedGenres] = useState<string[]>(['All']);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['All']);
+  const [selectedDate, setSelectedDate] = useState<string[]>(['All']);
 
-  const { inTheather, languages, genres, loadingInTheather, errorInTheather } =
-    useInTheather();
+  const {
+    inTheather,
+    languages,
+    genres,
+    allDates,
+    loadingInTheather,
+    errorInTheather,
+  } = useInTheather();
 
   if (loadingInTheather) return <Loader />;
   if (errorInTheather) return <ErrorState error={errorInTheather} />;
 
-  const timeSlots: TimeSlots[] = [
-    { time: '15:00', status: 'available' },
-    { time: '18:00', status: 'full' },
-    { time: '21:00', status: 'full' },
-  ];
-
-  const filterMovies: MovieData[] = inTheather.filter((movie) => {
+  const filterMovies: MovieWithSchedule[] = inTheather.filter((movie) => {
     {
       //Filter by searchTerm
       const matchesSearch = movie.title
@@ -49,7 +49,35 @@ const InTheather = () => {
       const matchesLang =
         isAllLangSelected || selectedLanguages.includes(langName);
 
-      return matchesSearch && matchesGenre && matchesLang;
+      // // Filter by availability
+      // let hasAvailability = false;
+
+      // if (selectedDate && movie.schedule[selectedDate]) {
+      //   // check only selected date
+      //   hasAvailability = movie.schedule[selectedDate].some(
+      //     (show) => !show.isFull
+      //   );
+      // } else {
+      //   // check all dates
+      //   hasAvailability = Object.values(movie.schedule).some((showtimes) =>
+      //     showtimes.some((show) => !show.isFull)
+      //   );
+      // }
+
+      // Filter by selected dates
+      const hasAvailabilityOnSelectedDates = selectedDate.includes('All')
+        ? Object.values(movie.schedule).some((showtimes) =>
+            showtimes.some((show) => !show.isFull)
+          )
+        : selectedDate.some((date) =>
+            movie.schedule[date]?.some((show) => !show.isFull)
+          );
+      return (
+        matchesSearch &&
+        matchesGenre &&
+        matchesLang &&
+        hasAvailabilityOnSelectedDates
+      );
     }
   });
 
@@ -67,15 +95,15 @@ const InTheather = () => {
           languages={languages}
           selectedLanguages={selectedLanguages}
           onLanguagesChange={setSelectedLanguages}
+          allDates={allDates}
+          selectedDate={selectedDate}
+          onDateChange={setSelectedDate}
         />
         {/*List of movies */}
         {filterMovies.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-16 text-center text-zinc-400'>
             <p className='text-lg font-medium text-zinc-300'>
               No matches found.
-            </p>
-            <p className='text-sm text-zinc-500'>
-              Try searching for another movie title!
             </p>
           </div>
         ) : (
@@ -102,30 +130,38 @@ const InTheather = () => {
                           {genre.name}
                         </span>
                       ))}
-                      {getOriginalLanguage(movie, languages)}
                     </div>
                   </div>
                 </div>
               ),
               content: (
-                <div className='flex flex-col gap-7 '>
-                  {timeSlots.map((time, index) => (
-                    <div
-                      key={index}
-                      className='flex justify-between items-center gap-6'
-                    >
-                      <span>{time.time}</span>
-                      <Link to={`/movies/${movie.id}/ticket`}>
-                        <button
-                          className={`p-2 ${
-                            time.status === 'full'
-                              ? 'bg-transparent !cursor-not-allowed'
-                              : 'primaryButton cursor-pointer rounded-xl'
-                          }`}
-                        >
-                          {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
-                        </button>
-                      </Link>
+                <div className='flex flex-col gap-6'>
+                  {Object.entries(movie.schedule).map(([date, showtimes]) => (
+                    <div key={date} className='flex flex-col gap-3'>
+                      {/* Date label */}
+                      <h4 className='font-semibold text-lg'>
+                        {formatDateLabel(date)}
+                      </h4>
+
+                      {/* Times row */}
+                      <div className='flex flex-wrap gap-3'>
+                        {showtimes.map((show) => (
+                          <Link
+                            key={`${date}-${show.time}`}
+                            to={`/movies/${movie.id}/ticket`}
+                            className={`px-4 py-2 rounded-xl text-sm font-medium border
+                              ${
+                                show.isFull
+                                  ? 'border-gray-600 text-gray-500 bg-transparent cursor-not-allowed border-dashed'
+                                  : 'bg-blue-600 text-white hover:bg-blue-700 transition'
+                              }`}
+                          >
+                            {show.isFull
+                              ? `${show.time} — Sold out`
+                              : `${show.time}`}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>

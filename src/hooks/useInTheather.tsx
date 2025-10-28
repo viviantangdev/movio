@@ -1,44 +1,46 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {
-  getGenre,
-  getLanguages,
-  getMovie,
-  getNowPlaying,
-} from '../api/endpoints';
+import { getLanguages, getMovie, getNowPlaying } from '../api/endpoints';
 import type { Genre, Language, MovieData } from '../types/movie';
+import type { MovieWithSchedule } from '../types/ticket';
+import { generateFakeSchedule } from '../utils/helpers';
 
 const useInTheather = () => {
-  const [inTheather, setInTheather] = useState<MovieData[]>([]);
+  const [inTheather, setInTheather] = useState<MovieWithSchedule[]>([]);
   const [loadingInTheather, setLoading] = useState(true);
   const [errorInTheather, setError] = useState<string | null>(null);
   const [languages, setLanguages] = useState<Language[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [allDates, setAllDates] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch now-playing movies + language + genre list in parallel
-        const [moviesRes, langsRes, genresRes] = await Promise.all([
+        // Fetch now-playing + language list in parallel
+        const [moviesRes, langsRes] = await Promise.all([
           axios.get(getNowPlaying),
           axios.get(getLanguages),
-          axios.get(getGenre),
         ]);
 
         // --- NowPlaying ---
         const nowPlaying: MovieData[] = moviesRes.data.results;
 
-        // Fetch detailed info for each movie in parallel
+        // Fetch detailed info for each movie + fake schedule in parallel
         const movieData = await Promise.all(
-          nowPlaying.map(async (movie) => {
+          nowPlaying.map(async (movie: MovieData) => {
             try {
               const detailsResponse = await axios.get(getMovie(movie.id));
-              return detailsResponse.data as MovieData;
+              const details = detailsResponse.data;
+
+              // attach fake schedule
+              const schedule = generateFakeSchedule();
+              return { ...details, schedule }; //merged result
             } catch {
-              // If one fails, still include the movie
-              return movie as MovieData;
+              // fallback movie (still attach a fake schedule)
+              const schedule = generateFakeSchedule();
+              return { ...movie, schedule };
             }
           })
         );
@@ -63,22 +65,36 @@ const useInTheather = () => {
         });
 
         // --- Genres ---
-        const allGenres: Genre[] = genresRes.data.genres;
+        // Flatten all genres from all movies
+        const allMovieGenres = movieData.flatMap((movie) => movie.genres);
 
-        // Get all genre IDs from now-playing movies
-        const usedGenreIds = new Set<number>();
-        movieData.forEach((movie) => {
-          movie.genres.forEach((id) => usedGenreIds.add(id.id));
+        // Remove duplicates by genre ID
+        const genreMap = new Map<number, Genre>();
+        allMovieGenres.forEach((genre) => {
+          genreMap.set(genre.id, genre); // map ensures uniqueness by id
         });
 
-        // Filter only the genres that are actually used
-        const availableGenres = allGenres.filter((genre) =>
-          usedGenreIds.has(genre.id)
-        );
+        // Convert back to array
+        const availableGenres = Array.from(genreMap.values());
 
         setInTheather(movieData);
         setLanguages(matchedLanguages);
         setGenres(availableGenres);
+
+        //AllDates
+        // Compute unique dates from all movie schedules
+        const datesSet = new Set<string>();
+        movieData.forEach((movie) => {
+          Object.keys(movie.schedule).forEach((date) => datesSet.add(date));
+        });
+
+        // Convert to sorted array
+        const sortedDates = Array.from(datesSet).sort(
+          (a, b) => new Date(a).getTime() - new Date(b).getTime()
+        );
+
+        // Update state
+        setAllDates(sortedDates);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           setError(err.response?.data?.message || err.message);
@@ -95,7 +111,14 @@ const useInTheather = () => {
     fetchData();
   }, []);
 
-  return { inTheather, languages, genres, loadingInTheather, errorInTheather };
+  return {
+    inTheather,
+    languages,
+    genres,
+    allDates,
+    loadingInTheather,
+    errorInTheather,
+  };
 };
 
 export default useInTheather;

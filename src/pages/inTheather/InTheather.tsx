@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import useInTheather from '../../hooks/pages/useInTheather';
-import useGenre from '../../hooks/useGenre';
 import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
@@ -15,11 +14,10 @@ import InTheatherHeroSection from './components/InTheatherHeroSection';
 
 const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { genres } = useGenre();
   const [selectedGenres, setSelectedGenres] = useState<string[]>(['All']);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['All']);
 
-  const { inTheather, languages, loadingInTheather, errorInTheather } =
+  const { inTheather, languages, genres, loadingInTheather, errorInTheather } =
     useInTheather();
 
   if (loadingInTheather) return <Loader />;

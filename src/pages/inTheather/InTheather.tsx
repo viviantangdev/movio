@@ -7,20 +7,20 @@ import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
 import type { MovieData } from '../../types/movie';
+import type { TimeSlots } from '../../types/ticket';
 import { formatRuntime } from '../../utils/format';
+import { getOriginalLanguage } from '../../utils/helpers';
 import FilterSection from './components/FilterSection';
 import InTheatherHeroSection from './components/InTheatherHeroSection';
-import type { TimeSlots } from '../../types/ticket';
-
-
-
 
 const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { genres } = useGenre();
   const [selectedGenres, setSelectedGenres] = useState<string[]>(['All']);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['All']);
 
-  const { inTheather, loadingInTheather, errorInTheather } = useInTheather();
+  const { inTheather, languages, loadingInTheather, errorInTheather } =
+    useInTheather();
 
   if (loadingInTheather) return <Loader />;
   if (errorInTheather) return <ErrorState error={errorInTheather} />;
@@ -45,7 +45,13 @@ const InTheather = () => {
         isAllSelected ||
         genreName.some((genreName) => selectedGenres.includes(genreName));
 
-      return matchesSearch && matchesGenre;
+      //Filter by languages
+      const isAllLangSelected = selectedLanguages.includes('All');
+      const langName = getOriginalLanguage(movie, languages);
+      const matchesLang =
+        isAllLangSelected || selectedLanguages.includes(langName);
+
+      return matchesSearch && matchesGenre && matchesLang;
     }
   });
 
@@ -60,6 +66,9 @@ const InTheather = () => {
           genres={genres}
           selectedGenres={selectedGenres}
           onGenresChange={setSelectedGenres}
+          languages={languages}
+          selectedLanguages={selectedLanguages}
+          onLanguagesChange={setSelectedLanguages}
         />
         {/*List of movies */}
         {filterMovies.length === 0 ? (
@@ -95,6 +104,7 @@ const InTheather = () => {
                           {genre.name}
                         </span>
                       ))}
+                      {getOriginalLanguage(movie, languages)}
                     </div>
                   </div>
                 </div>

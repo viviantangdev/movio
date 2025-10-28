@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
-import type { Genre } from '../../../types/movie';
+import type { Genre, Language } from '../../../types/movie';
 import { formatDate, generateDates } from '../../../utils/format';
 import DateSelectModal from './DateSelectModal';
 import FilterSelectModal from './FilterSelectModal';
@@ -11,6 +11,9 @@ interface FilterSectipnProps {
   genres: Genre[];
   selectedGenres: string[];
   onGenresChange: React.Dispatch<React.SetStateAction<string[]>>;
+  languages: Language[];
+  selectedLanguages: string[];
+  onLanguagesChange: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FilterSection = ({
@@ -19,42 +22,57 @@ const FilterSection = ({
   genres,
   selectedGenres,
   onGenresChange,
+  languages,
+  selectedLanguages,
+  onLanguagesChange,
 }: FilterSectipnProps) => {
+
   const dates = generateDates(7);
   const [selectedDate, setSelectedDate] = useState<string>(
     formatDate(dates[0])
   );
 
-  const handleGenreSelect = (genre: string) => {
-    onGenresChange((prev) => {
+  const handleSelect = (
+    item: string,
+    onChange: (update: (prev: string[]) => string[]) => void
+  ) => {
+    onChange((prev) => {
       // If user clicks "All"
-      if (genre === 'All') {
+      if (item === 'All') {
         return ['All'];
       }
 
-      // Remove "All" if other genres are selected
-      const filtered = prev.filter((g) => g !== 'All');
+      // Remove "All" if other items are selected
+      const filtered = prev.filter((f) => f !== 'All');
 
-      // Toggle the clicked genre
-      const isSelected = filtered.includes(genre);
+      // Toggle the clicked item
+      const isSelected = filtered.includes(item);
       const updated = isSelected
-        ? filtered.filter((g) => g !== genre)
-        : [...filtered, genre];
+        ? filtered.filter((f) => f !== item)
+        : [...filtered, item];
 
       // If all deselected, fallback to "All"
       return updated.length === 0 ? ['All'] : updated;
     });
   };
 
-  const handleRemoveFilter = (filter: string) => {
-    const filtered = selectedGenres.filter((g) => g !== filter);
+  const handleRemoveTag = (
+    filter: string,
+    selectedItems: string[],
+    onChange: (updated: string[]) => void
+  ) => {
+    const filtered = selectedItems.filter((item) => item !== filter);
 
-    // If all genres removed: then add 'All' or filter accordingly
     if (filtered.length === 0) {
-      onGenresChange(['All']);
+      onChange(['All']);
     } else {
-      onGenresChange(filtered);
+      onChange(filtered);
     }
+  };
+
+  const handleClearTags = () => {
+    onGenresChange(['All']);
+    onLanguagesChange(['All']);
   };
 
   return (
@@ -72,7 +90,18 @@ const FilterSection = ({
               label: 'Genres',
               data: genres.map((g) => ({ id: g.id, name: g.name })),
               selected: selectedGenres,
-              onSelect: handleGenreSelect,
+              onSelect: (genre: string) => handleSelect(genre, onGenresChange),
+              isMulti: true,
+              hasAllOption: true,
+            },
+            languages: {
+              label: 'Languages',
+              data: languages.map((l) => ({
+                id: l.iso_639_1,
+                name: l.english_name,
+              })),
+              selected: selectedLanguages,
+              onSelect: (lang: string) => handleSelect(lang, onLanguagesChange),
               isMulti: true,
               hasAllOption: true,
             },
@@ -101,22 +130,39 @@ const FilterSection = ({
         </div>
       </div>
       {/*Selected filter tags */}
-      {!selectedGenres.includes('All') && (
+      {(!selectedGenres.includes('All') ||
+        !selectedLanguages.includes('All')) && (
         <div className='flex gap-2 pb-5'>
           <button
-            onClick={() => onGenresChange(['All'])}
+            onClick={() => handleClearTags()}
             className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 transition-smooth'
           >
             Clear
           </button>
-          {selectedGenres.map((g) => (
-            <button
-              onClick={() => handleRemoveFilter(g)}
-              className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl border-1 border-zinc-800 hover:border-zinc-700 transition-smooth'
-            >
-              {g} <IoClose />
-            </button>
-          ))}
+          {selectedGenres
+            .filter((item) => item !== 'All') //Skip 'All'
+            .map((g) => (
+              <button
+                onClick={() =>
+                  handleRemoveTag(g, selectedGenres, onGenresChange)
+                }
+                className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl border-1 border-zinc-800 hover:border-zinc-700 transition-smooth'
+              >
+                {g} <IoClose />
+              </button>
+            ))}
+          {selectedLanguages
+            .filter((item) => item !== 'All') //Skip 'All'
+            .map((l) => (
+              <button
+                onClick={() =>
+                  handleRemoveTag(l, selectedLanguages, onLanguagesChange)
+                }
+                className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded-xl border-1 border-zinc-800 hover:border-zinc-700 transition-smooth'
+              >
+                {l} <IoClose />
+              </button>
+            ))}
         </div>
       )}
     </>

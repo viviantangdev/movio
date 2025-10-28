@@ -5,7 +5,7 @@ import useMovie from '../../hooks/useMovie';
 import useVideo from '../../hooks/useVideo';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
-import type { Language, MovieData } from '../../types/movie';
+import { getOriginalLanguage } from '../../utils/helpers';
 import MovieHeroSection from './components/MovieHeroSection';
 
 const Movie = () => {
@@ -18,14 +18,7 @@ const Movie = () => {
   if (!movie || errorMovie || errorCredits || errorLanguages)
     return <ErrorState error={errorMovie || errorCredits || errorLanguages} />;
 
-  const getOriginalLanguage = (
-    movie: MovieData,
-    languages: Language[]
-  ): string => {
-    const iso = movie.original_language;
-    const found = languages.find((l) => l.iso_639_1 === iso);
-    return found?.english_name ?? 'Unknown';
-  };
+
 
   const originalLanguage = getOriginalLanguage(movie, languages);
 

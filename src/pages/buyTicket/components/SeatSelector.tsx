@@ -1,38 +1,37 @@
-import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import type { Seat } from '../../../types/ticket';
 
-interface Seat {
-  id: string;
-  row: number;
-  number: number;
+interface SeatSelectorProps {
+  selectedSeats: string[];
+  onSeatChange: (selected: string[]) => void;
 }
-
-const generateSeats = (rows: number, perRow: number): Seat[] => {
-  const seats: Seat[] = [];
-  for (let row = 1; row <= rows; row++) {
-    for (let num = 1; num <= perRow; num++) {
-      seats.push({
-        id: `${row}-${num}`,
-        row,
-        number: num,
-      });
-    }
-  }
-  return seats;
-};
-
-const SeatSelector = () => {
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+const SeatSelector = ({ selectedSeats, onSeatChange }: SeatSelectorProps) => {
   const rows = 4;
   const perRow = 6;
+
+  const generateSeats = (rows: number, perRow: number): Seat[] => {
+    const seats: Seat[] = [];
+    for (let row = 1; row <= rows; row++) {
+      for (let num = 1; num <= perRow; num++) {
+        seats.push({
+          id: `${row}-${num}`,
+          row,
+          number: num,
+        });
+      }
+    }
+    return seats;
+  };
+
   const seats = generateSeats(rows, perRow);
 
   const toggleSeat = (seat: Seat) => {
-    setSelectedSeats((prev) =>
-      prev.includes(seat.id)
-        ? prev.filter((id) => id !== seat.id)
-        : [...prev, seat.id]
-    );
+    const seatId = seat.id;
+    if (selectedSeats.includes(seatId)) {
+      onSeatChange(selectedSeats.filter((s) => s !== seatId));
+    } else {
+      onSeatChange([...selectedSeats, seatId]);
+    }
   };
 
   return (

@@ -66,3 +66,7 @@ input {
     @apply outline-none ring-2 ring-emerald-400;
   }
 }
+.step-wizard {
+  transform: none !important;
+  z-index: auto !important;
+}

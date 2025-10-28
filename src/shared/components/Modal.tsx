@@ -13,6 +13,8 @@ interface ModalProps {
   children: React.ReactNode;
   header: string;
 }
+ReactModal.setAppElement("#root"); // or your app container
+
 const Modal = ({ header, children, button }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (

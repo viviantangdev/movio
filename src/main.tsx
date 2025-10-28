@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router';
 import './App.css';
 import App from './App.tsx';
 import { ModalProvider } from "react-modal-hook";
+import ReactModal from 'react-modal';
+
+ReactModal.setAppElement('#root');
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

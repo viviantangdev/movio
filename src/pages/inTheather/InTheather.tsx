@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 import useInTheather from '../../hooks/pages/useInTheather';
 import useGenre from '../../hooks/useGenre';
 import Accordion from '../../shared/components/Accordion';
@@ -9,13 +10,10 @@ import type { MovieData } from '../../types/movie';
 import { formatRuntime } from '../../utils/format';
 import FilterSection from './components/FilterSection';
 import InTheatherHeroSection from './components/InTheatherHeroSection';
+import type { TimeSlots } from '../../types/ticket';
 
-interface TImeSlots {
-  time: string;
-  status: Status;
-}
 
-type Status = 'full' | 'available';
+
 
 const InTheather = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -27,7 +25,7 @@ const InTheather = () => {
   if (loadingInTheather) return <Loader />;
   if (errorInTheather) return <ErrorState error={errorInTheather} />;
 
-  const timeSlots: TImeSlots[] = [
+  const timeSlots: TimeSlots[] = [
     { time: '15:00', status: 'available' },
     { time: '18:00', status: 'full' },
     { time: '21:00', status: 'full' },
@@ -55,7 +53,6 @@ const InTheather = () => {
     <>
       <InTheatherHeroSection />
       <main>
-        {' '}
         {/*Filter section */}
         <FilterSection
           searchTerm={searchTerm}
@@ -110,15 +107,17 @@ const InTheather = () => {
                       className='flex justify-between items-center gap-6'
                     >
                       <span>{time.time}</span>
-                      <span
-                        className={`p-2 ${
-                          time.status === 'full'
-                            ? 'bg-transparent cursor-not-allowed'
-                            : 'primaryButton cursor-pointer rounded-xl'
-                        }`}
-                      >
-                        {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
-                      </span>
+                      <Link to={`/movies/${movie.id}/ticket`}>
+                        <button
+                          className={`p-2 ${
+                            time.status === 'full'
+                              ? 'bg-transparent !cursor-not-allowed'
+                              : 'primaryButton cursor-pointer rounded-xl'
+                          }`}
+                        >
+                          {time.status === 'full' ? 'Sold out' : 'Buy ticket'}
+                        </button>
+                      </Link>
                     </div>
                   ))}
                 </div>

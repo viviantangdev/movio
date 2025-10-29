@@ -2,10 +2,7 @@
 
 A modern, user-friendly cinema management and ticket booking application that allows users to browse movies, view showtimes, book seats, and manage their cinema experience seamlessly.
 
----
-
-## Demo
-
+[🔗 Live Demo](https://viviantangdev.github.io/movio/)
 
 ---
 
@@ -25,16 +22,9 @@ A modern, user-friendly cinema management and ticket booking application that al
 - **React** – Core library for building the user interface and handling component state.  
 - **TypeScript** – Strongly typed JavaScript that improves developer experience and prevents runtime errors.  
 - **Tailwind CSS** – Utility-first CSS framework for fast, responsive, and consistent styling.  
-- **Vite** (or Create React App) – Modern development server and build tool for lightning-fast setup and hot reloads.  
-
-| Technology       | Purpose |
-|------------------|--------|
-| **React**        | UI components and state management |
-| **TypeScript**   | Type safety and better developer experience |
-| **Tailwind CSS** | Rapid, responsive styling |
-| **Vite**         | Fast development server and build tool |
-| **Axios**        | HTTP requests to mock/fake API |
-
+- **Vite** – Modern development server and build tool for lightning-fast setup and hot reloads.  
+- **Axios** – HTTP requests.  
+- **TMDB API** – Real movie data.
 
 ---
 

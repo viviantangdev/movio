@@ -22,7 +22,7 @@ export function generateFakeSchedule( days = 3): Record<string, { time: string; 
 
     const showtimes = ["13:00", "16:30", "20:00"].map((time) => ({
       time,
-      // randomize ~20% of showings as full
+      // randomize ~90% of showings as full
       isFull: Math.random() < 0.9,
     }));
 

@@ -6,8 +6,8 @@ import {
   TICKET_PRICE,
   type MovieWithSchedule,
 } from '../../../types/ticket';
-import { formatRuntime } from '../../../utils/format';
-import DateAndTiimeSelectModal from './DateAndTimeSelectModal';
+import { formatDateLabel, formatRuntime } from '../../../utils/format';
+import DateAndTimeSelectModal from './DateAndTimeSelectModal';
 import SeatSelector from './SeatSelector';
 
 interface BookingSectionProps {
@@ -86,21 +86,30 @@ const BookingSection = ({
           )}
 
           <div className='flex flex-col'>
-            <span>{selectedDate ? selectedDate : '—'}</span>
+            <span>{selectedDate ? formatDateLabel(selectedDate) : '—'}</span>
             <span>{selectedTime || '—'}</span>
           </div>
         </div>
-        <DateAndTiimeSelectModal
+        <DateAndTimeSelectModal
           filters={{
             date: {
               label: 'Date',
-              data: availableDates.map((d, i) => ({ id: i, name: d })),
+              data: availableDates.map((v, i) => ({
+                id: i,
+                name: formatDateLabel(v),
+                value: v,
+              })),
               selected: selectedDate,
               onSelect: setSelectedDate,
             },
             time: {
               label: 'Time',
-              data: availableTimes.map((t, i) => ({ id: i, name: t.time })),
+              data: availableTimes.map((v, i) => ({
+                id: i,
+                name: v.time,
+                value: v.time,
+                isFull: v.isFull,
+              })),
               selected: selectedTime,
               onSelect: setSelectedTime,
             },

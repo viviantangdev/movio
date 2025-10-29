@@ -152,7 +152,6 @@ const InTheather = () => {
                             <button
                               key={`${date}-${show.time}`}
                               onClick={handleClick}
-                              // to={`/movies/${movie.id}/ticket`}
                               className={`px-4 py-2 rounded-xl text-sm font-medium border
                               ${
                                 show.isFull

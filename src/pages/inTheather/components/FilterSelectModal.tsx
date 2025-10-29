@@ -4,6 +4,7 @@ import Modal from '../../../shared/components/Modal';
 interface FilterOption {
   id: string | number;
   name: string;
+  value:string;
 }
 
 interface FilterConfig {
@@ -59,12 +60,12 @@ const FilterSelectModal = ({ filters }: FilterSelectModalProps) => {
                   )}
 
                   {data.map((item) => {
-                    const isSelected = selected.includes(item.name);
+                    const isSelected = selected.includes(item.value);
 
                     return (
                       <p
                         key={item.id}
-                        onClick={() => onSelect(item.name)}
+                        onClick={() => onSelect(item.value)}
                         className={getItemClassName(isSelected)}
                       >
                         {item.name}

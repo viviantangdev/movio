@@ -44,8 +44,8 @@ const useBuyTicket = () => {
 
         // --- Movie ---
         const movie: MovieWithSchedule = movieRes.data;
-        const schedule = generateFakeSchedule(3);
-        // Merge
+        const schedule = generateFakeSchedule();
+        // Merge fake schedule
         const movieWithSchedule: MovieWithSchedule = {
           ...movie,
           schedule,

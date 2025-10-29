@@ -4,6 +4,8 @@ import Modal from '../../../shared/components/Modal';
 interface DateAndTimeOption {
   id: string | number;
   name: string;
+  value: string;
+  isFull?: boolean;
 }
 
 interface DateAndTimeConfig {
@@ -17,13 +19,17 @@ interface DateAndTimeSelectProps {
   filters: Record<string, DateAndTimeConfig>;
 }
 const DateAndTimeSelectModal = ({ filters }: DateAndTimeSelectProps) => {
-  const getItemClassName = (selected: boolean) => {
+  const getItemClassName = (selected: boolean, isFull: boolean) => {
     return `cursor-pointer px-2 py-1 rounded-xl transition-smooth border-1
-        ${
-          selected
-            ? 'border-emerald-500 bg-emerald-500 text-black'
-            : 'border-zinc-800 hover:text-emerald-400 hover:border-zinc-700'
-        }`;
+       ${
+         selected
+           ? 'border-emerald-500 bg-emerald-500 text-black'
+           : isFull
+           ? 'border-gray-600 text-gray-500 bg-transparent !cursor-not-allowed border-dashed'
+           : 'border-zinc-800 hover:text-emerald-400 hover:border-zinc-700'
+       }
+        
+      `;
   };
 
   return (
@@ -45,16 +51,17 @@ const DateAndTimeSelectModal = ({ filters }: DateAndTimeSelectProps) => {
                 <p className='font-semibold mb-2'>{label}</p>
                 <div className='flex flex-wrap gap-2'>
                   {data.map((item) => {
-                    const isSelected = selected.includes(item.name);
-
+                    const isSelected = selected.includes(item.value);
+                    const isFull = item.isFull === true;
                     return (
-                      <p
+                      <button
                         key={item.id}
-                        onClick={() => onSelect(item.name)}
-                        className={getItemClassName(isSelected)}
+                        disabled={isFull}
+                        onClick={() => onSelect(item.value)}
+                        className={getItemClassName(isSelected, isFull)}
                       >
-                        {item.name}
-                      </p>
+                        {isFull ? `${item.name} - Sold out` : `${item.name}`}
+                      </button>
                     );
                   })}
                 </div>

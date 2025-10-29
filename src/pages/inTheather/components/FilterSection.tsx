@@ -1,5 +1,6 @@
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import type { Genre, Language } from '../../../types/movie';
+import { formatDateLabel } from '../../../utils/format';
 import FilterSelectModal from './FilterSelectModal';
 
 interface FilterSectipnProps {
@@ -81,7 +82,11 @@ const FilterSection = ({
           filters={{
             dates: {
               label: 'Dates',
-              data: allDates.map((g) => ({ id: g, name: g })),
+              data: allDates.map((v, i) => ({
+                id: i,
+                name: formatDateLabel(v),
+                value: v,
+              })),
               selected: selectedDate,
               onSelect: (date: string) => handleSelect(date, onDateChange),
               isMulti: true,
@@ -89,7 +94,11 @@ const FilterSection = ({
             },
             genres: {
               label: 'Genres',
-              data: genres.map((g) => ({ id: g.id, name: g.name })),
+              data: genres.map((v) => ({
+                id: v.id,
+                name: v.name,
+                value: v.name,
+              })),
               selected: selectedGenres,
               onSelect: (genre: string) => handleSelect(genre, onGenresChange),
               isMulti: true,
@@ -97,9 +106,10 @@ const FilterSection = ({
             },
             languages: {
               label: 'Languages',
-              data: languages.map((l) => ({
-                id: l.iso_639_1,
-                name: l.english_name,
+              data: languages.map((v) => ({
+                id: v.iso_639_1,
+                name: v.english_name,
+                value: v.english_name,
               })),
               selected: selectedLanguages,
               onSelect: (lang: string) => handleSelect(lang, onLanguagesChange),

@@ -1,4 +1,5 @@
 import { IoTimeOutline } from 'react-icons/io5';
+import useBuyTicket from '../../../hooks/useBuyTicket';
 import type { MovieData } from '../../../types/movie';
 import { TICKET_CURRENCY, TICKET_PRICE } from '../../../types/ticket';
 import { formatRuntime } from '../../../utils/format';
@@ -6,19 +7,11 @@ import CinemaCheckoutCardForm from './CheckoutForm';
 
 interface CheckoutSectionProps {
   movie: MovieData;
-  selectedDate: string;
-  selectedTime: string;
   selectedSeats: string[];
-  // email: string;
 }
 
-const CheckoutSection = ({
-  movie,
-  selectedDate,
-  selectedTime,
-  selectedSeats,
-  // email,
-}: CheckoutSectionProps) => {
+const CheckoutSection = ({ movie, selectedSeats }: CheckoutSectionProps) => {
+  const { selectedDate, selectedTime } = useBuyTicket();
   return (
     <section className='flex flex-col gap-5 pb-15'>
       <h2 className='text-xl font-semibold'>Summary and payment</h2>
@@ -60,22 +53,24 @@ const CheckoutSection = ({
               ))}
             </div>
           </div>
-        
- 
         </div>
       </div>
       {/*Payment */}
       <div className='flex flex-col items-start bg-zinc-800 p-5 rounded-xl gap-5'>
         <h2 className='text-xl font-semibold'>Payment</h2>
-          <div className='flex gap-3'>
+        <div className='flex gap-3'>
           <span>{selectedSeats.length} x Ticket:</span>
-          <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
+          <p>
+            {TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}
+          </p>
         </div>
         <div className='flex gap-3 font-extrabold'>
           <span>Total amount:</span>
-          <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
+          <p>
+            {TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}
+          </p>
         </div>
-        <CinemaCheckoutCardForm amount={selectedSeats.length * TICKET_PRICE}/>
+        <CinemaCheckoutCardForm amount={selectedSeats.length * TICKET_PRICE} />
       </div>
     </section>
   );

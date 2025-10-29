@@ -1,54 +1,61 @@
 import { useEffect, useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
-import type { MovieData } from '../../../types/movie';
-import { dates, TICKET_CURRENCY, TICKET_PRICE, timeSlots } from '../../../types/ticket';
-import { formatDate, formatRuntime } from '../../../utils/format';
+import useBuyTicket from '../../../hooks/useBuyTicket';
+import {
+  TICKET_CURRENCY,
+  TICKET_PRICE,
+  type MovieWithSchedule,
+} from '../../../types/ticket';
+import { formatRuntime } from '../../../utils/format';
 import DateAndTiimeSelectModal from './DateAndTimeSelectModal';
 import SeatSelector from './SeatSelector';
 
 interface BookingSectionProps {
-  movie: MovieData;
-  selectedDate: string;
-  onSelectedDate: (value: string) => void;
-  selectedTime: string;
-  onSelectedTime: (value: string) => void;
+  movie: MovieWithSchedule;
   selectedSeats: string[];
   onSelectedSeats: (selected: string[]) => void;
   nextStep: () => void;
 }
 const BookingSection = ({
   movie,
-  selectedDate,
-  selectedTime,
-  onSelectedDate,
-  onSelectedTime,
   selectedSeats,
   onSelectedSeats,
   nextStep,
 }: BookingSectionProps) => {
+  const [errorDateAndTime, setErrorDateAndTime] = useState<string>('');
   const [errorSeats, setErrorSeats] = useState<string>('');
+  const { selectedDate, selectedTime, setSelectedDate, setSelectedTime } =
+    useBuyTicket();
 
+  // Extract real dates from movie.schedule
+  const availableDates = movie.schedule ? Object.keys(movie.schedule) : [];
+  const availableTimes = movie.schedule?.[selectedDate] || [];
+
+  // Clear seat error when seats are selected
   useEffect(() => {
-    if (selectedSeats.length > 0 && errorSeats) setErrorSeats('');
-  }, [selectedSeats, errorSeats]);
+    if (selectedSeats.length > 0 && errorSeats) {
+      setErrorSeats('');
+    }
+    if (selectedDate && selectedTime && errorDateAndTime) {
+      setErrorDateAndTime('');
+    }
+  }, [selectedSeats, errorSeats, selectedDate, selectedTime, errorDateAndTime]);
 
   const handleNextStep = () => {
-    // reset existing errors
-    setErrorSeats('');
-
-    const hasSeats = selectedSeats.length > 0;
-
-    if (!hasSeats) {
+    if (selectedSeats.length === 0) {
       setErrorSeats('Please select at least one seat');
       return;
+    } else if (!selectedDate || !selectedTime) {
+      setErrorDateAndTime('Please select date and time');
+      return;
     }
-
     nextStep();
   };
 
   return (
     <section className='flex flex-col gap-5'>
       <h2 className='text-xl font-semibold'>Select Date, Time & Seats</h2>
+      {/* Movie Info */}
       <div className='flex items-end gap-2'>
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -70,27 +77,32 @@ const BookingSection = ({
           </div>
         </div>
       </div>
+      {/* Date & Time */}
       <div className='flex items-start justify-between bg-zinc-800 p-5 rounded-xl'>
         <div className='flex flex-col gap-2'>
           <h3 className='font-medium'>Date and times</h3>
+          {errorDateAndTime && (
+            <p className='text-red-500 text-sm'>{errorDateAndTime}</p>
+          )}
+
           <div className='flex flex-col'>
-            <span>{selectedDate}</span>
-            <span>{selectedTime}</span>
+            <span>{selectedDate ? selectedDate : '—'}</span>
+            <span>{selectedTime || '—'}</span>
           </div>
         </div>
         <DateAndTiimeSelectModal
           filters={{
             date: {
               label: 'Date',
-              data: dates.map((d, i) => ({ id: i, name: formatDate(d) })),
+              data: availableDates.map((d, i) => ({ id: i, name: d })),
               selected: selectedDate,
-              onSelect: onSelectedDate,
+              onSelect: setSelectedDate,
             },
             time: {
               label: 'Time',
-              data: timeSlots.map((t, i) => ({ id: i, name: t.time })),
+              data: availableTimes.map((t, i) => ({ id: i, name: t.time })),
               selected: selectedTime,
-              onSelect: onSelectedTime,
+              onSelect: setSelectedTime,
             },
           }}
         />
@@ -108,7 +120,9 @@ const BookingSection = ({
       </div>
       <div className='flex justify-between items-start bg-zinc-800 p-5 rounded-xl'>
         <p>Ticket x {selectedSeats.length}</p>
-        <p>{TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}</p>
+        <p>
+          {TICKET_CURRENCY} {selectedSeats.length * TICKET_PRICE}
+        </p>
       </div>
 
       <button

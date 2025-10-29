@@ -2,17 +2,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCredits, getLanguages, getMovie, getVideo } from '../api/endpoints';
-import type {
-  CastMember,
-  CrewMember,
-  Language,
-  MovieData,
-  Video,
-} from '../types/movie';
+import type { CastMember, CrewMember, Language, Video } from '../types/movie';
+import type { MovieWithSchedule } from '../types/ticket';
 
 const useMovie = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  const [movie, setMovie] = useState<MovieData | null>(null);
+  const [movie, setMovie] = useState<MovieWithSchedule | null>(null);
   const [loadingMovie, setLoading] = useState<boolean>(true);
   const [errorMovie, setError] = useState<string | null>(null);
   const [video, setVideo] = useState<string | null>(null);
@@ -20,7 +15,6 @@ const useMovie = () => {
   const [casts, setCasts] = useState<CastMember[]>([]);
   const [crews, setCrews] = useState<CrewMember[]>([]);
 
-  
   useEffect(() => {
     if (!movieId) return;
 
@@ -37,7 +31,7 @@ const useMovie = () => {
         ]);
 
         // --- Movie ---
-        const movie: MovieData = movieRes.data;
+        const movie: MovieWithSchedule = movieRes.data;
 
         // --- Video ---
         const video: Video[] = videoRes.data.results;

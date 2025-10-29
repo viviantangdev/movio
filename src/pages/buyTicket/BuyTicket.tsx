@@ -1,22 +1,16 @@
 import { useState } from 'react';
 import { IoTicket } from 'react-icons/io5';
-import useMovie from '../../hooks/useMovie';
+import useBuyTicket from '../../hooks/useBuyTicket';
 import ErrorState from '../../shared/components/ErrorState';
 import Loader from '../../shared/components/Loader';
-import { dates, timeSlots } from '../../types/ticket';
-import { formatDate } from '../../utils/format';
 import BookingSection from './components/BookingSection';
 import CheckoutSection from './components/CheckoutSection';
 
 const BuyTicket = () => {
-  const { movie, loadingMovie, errorMovie } = useMovie();
+  const { movie, loadingMovie, errorMovie } = useBuyTicket();
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string>(
-    formatDate(dates[0])
-  );
-  const [selectedTime, setSelectedTime] = useState<string>(timeSlots[0].time);
-  // const [email, setEmail] = useState<string>('');
-  const [isAllFiled, setIsAllFiled] = useState<boolean>(false); ///Change to false when ready
+  const [isAllFiled, setIsAllFiled] = useState<boolean>(false); 
+  
   if (loadingMovie) return <Loader />;
   if (!movie || errorMovie) return <ErrorState error={errorMovie} />;
 
@@ -27,20 +21,10 @@ const BuyTicket = () => {
         <h2>Buy ticket</h2>
       </div>
       {isAllFiled ? (
-        <CheckoutSection
-          movie={movie}
-          selectedDate={selectedDate}
-          selectedTime={selectedTime}
-          selectedSeats={selectedSeats}
-          // email={email}
-        />
+        <CheckoutSection movie={movie} selectedSeats={selectedSeats} />
       ) : (
         <BookingSection
           movie={movie}
-          selectedDate={selectedDate}
-          selectedTime={selectedTime}
-          onSelectedDate={setSelectedDate}
-          onSelectedTime={setSelectedTime}
           selectedSeats={selectedSeats}
           onSelectedSeats={setSelectedSeats}
           nextStep={() => setIsAllFiled(true)}

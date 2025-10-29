@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useInTheather from '../../hooks/useInTheather';
 import Accordion from '../../shared/components/Accordion';
 import ErrorState from '../../shared/components/ErrorState';
@@ -16,6 +16,7 @@ const InTheather = () => {
   const [selectedGenres, setSelectedGenres] = useState<string[]>(['All']);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['All']);
   const [selectedDate, setSelectedDate] = useState<string[]>(['All']);
+  const navigate = useNavigate();
 
   const {
     inTheather,
@@ -48,21 +49,6 @@ const InTheather = () => {
       const langName = getOriginalLanguage(movie, languages);
       const matchesLang =
         isAllLangSelected || selectedLanguages.includes(langName);
-
-      // // Filter by availability
-      // let hasAvailability = false;
-
-      // if (selectedDate && movie.schedule[selectedDate]) {
-      //   // check only selected date
-      //   hasAvailability = movie.schedule[selectedDate].some(
-      //     (show) => !show.isFull
-      //   );
-      // } else {
-      //   // check all dates
-      //   hasAvailability = Object.values(movie.schedule).some((showtimes) =>
-      //     showtimes.some((show) => !show.isFull)
-      //   );
-      // }
 
       // Filter by selected dates
       const hasAvailabilityOnSelectedDates = selectedDate.includes('All')
@@ -145,22 +131,41 @@ const InTheather = () => {
 
                       {/* Times row */}
                       <div className='flex flex-wrap gap-3'>
-                        {showtimes.map((show) => (
-                          <Link
-                            key={`${date}-${show.time}`}
-                            to={`/movies/${movie.id}/ticket`}
-                            className={`px-4 py-2 rounded-xl text-sm font-medium border
+                        {showtimes.map((show) => {
+                          const handleClick = () => {
+                            if (show.isFull) return; // disable full
+
+                            // Build URL with query params
+                            const searchParams = new URLSearchParams({
+                              date,
+                              time: show.time,
+                            });
+
+                            navigate(
+                              `/movies/${
+                                movie.id
+                              }/ticket?${searchParams.toString()}`
+                            );
+                          };
+
+                          return (
+                            <button
+                              key={`${date}-${show.time}`}
+                              onClick={handleClick}
+                              // to={`/movies/${movie.id}/ticket`}
+                              className={`px-4 py-2 rounded-xl text-sm font-medium border
                               ${
                                 show.isFull
                                   ? 'border-gray-600 text-gray-500 bg-transparent cursor-not-allowed border-dashed'
                                   : 'bg-blue-600 text-white hover:bg-blue-700 transition'
                               }`}
-                          >
-                            {show.isFull
-                              ? `${show.time} — Sold out`
-                              : `${show.time}`}
-                          </Link>
-                        ))}
+                            >
+                              {show.isFull
+                                ? `${show.time} — Sold out`
+                                : `${show.time}`}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
